@@ -181,6 +181,14 @@
     <Compile Include="Migrations\201703070925398_userUpdate.Designer.cs">
       <DependentUpon>201703070925398_userUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703071048540_models.cs" />
+    <Compile Include="Migrations\201703071048540_models.Designer.cs">
+      <DependentUpon>201703071048540_models.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703071140352_userUpdate1.cs" />
+    <Compile Include="Migrations\201703071140352_userUpdate1.Designer.cs">
+      <DependentUpon>201703071140352_userUpdate1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -261,6 +269,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703070925398_userUpdate.resx">
       <DependentUpon>201703070925398_userUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703071048540_models.resx">
+      <DependentUpon>201703071048540_models.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703071140352_userUpdate1.resx">
+      <DependentUpon>201703071140352_userUpdate1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
