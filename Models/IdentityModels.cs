@@ -17,7 +17,7 @@ namespace Community3.Models
         Female
     }
 
-    public class ApplicationUser : IdentityUser
+    public class AppUser : IdentityUser
     {
 
         public Gender Gender { get; set; }
@@ -29,18 +29,18 @@ namespace Community3.Models
 
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Audio> Audios { get; set; }
-        public virtual ICollection<ApplicationUser> Friends { get; set; }
+        public virtual ICollection<AppUser> Friends { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
 
-        public ApplicationUser()
+        public AppUser()
         {
             this.Images = new HashSet<Image>();
             this.Audios = new HashSet<Audio>();
-            this.Friends = new HashSet<ApplicationUser>();
+            this.Friends = new HashSet<AppUser>();
             this.Groups = new HashSet<Group>();
         }
 
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
         {
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             return userIdentity;
@@ -57,15 +57,15 @@ namespace Community3.Models
         public string Name { get; set; }
 
         [Required]
-        public ApplicationUser Owner { get; set; }
+        public AppUser Owner { get; set; }
         public DateTime CreationDate { get; set; }
-        public virtual ICollection<ApplicationUser> Users { get; set; }
+        public virtual ICollection<AppUser> GroupUsers { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Audio> Audios { get; set; }
 
         public Group()
         {
-            this.Users = new HashSet<ApplicationUser>();
+            this.GroupUsers = new HashSet<AppUser>();
             this.Images = new HashSet<Image>();
             this.Audios = new HashSet<Audio>();
         }
@@ -81,12 +81,12 @@ namespace Community3.Models
         [MaxLength(50), MinLength(1)]
         public string Name { get; set; }
 
-        public virtual ICollection<ApplicationUser> OwnersUsers { get; set; }
+        public virtual ICollection<AppUser> OwnersUsers { get; set; }
         public virtual ICollection<Group> OwnersGroups { get; set; }
 
         public Audio()
         {
-            this.OwnersUsers = new HashSet<ApplicationUser>();
+            this.OwnersUsers = new HashSet<AppUser>();
             this.OwnersGroups = new HashSet<Group>();
         }
     }
@@ -101,12 +101,12 @@ namespace Community3.Models
         [MaxLength(50), MinLength(1)]
         public string Name { get; set; }
 
-        public virtual ICollection<ApplicationUser> OwnersUsers { get; set; }
+        public virtual ICollection<AppUser> OwnersUsers { get; set; }
         public virtual ICollection<Group> OwnersGroups { get; set; }
 
         public Image()
         {
-            this.OwnersUsers = new HashSet<ApplicationUser>();
+            this.OwnersUsers = new HashSet<AppUser>();
             this.OwnersGroups = new HashSet<Group>();
         }
     }
@@ -114,13 +114,13 @@ namespace Community3.Models
     public class Message
     {
         public int MessageId { get; set; }
-        public ApplicationUser Sender { get; set; }
+        public AppUser Sender { get; set; }
         public string Text { get; set; }
         public DateTime CreationTime { get; set; }
-        public ApplicationUser Recipient { get; set; }
+        public AppUser Recipient { get; set; }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public DbSet<Group> Groups { get; set; }
         public DbSet<Message> Messages { get; set; }
