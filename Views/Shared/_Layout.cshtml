@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title – приложение ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                @Html.ActionLink("Имя приложения", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" style="margin-top:20px">
+        <div class="row">
+            <div class="col-md-7 col-md-offset-1">
+                @RenderBody()
+            </div>
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="/Users/MyDialogues" class="list-group-item">
+                        <span class="glyphicon glyphicon-envelope"></span> My dialogues <span class="badge"></span>
+                    </a>
+                    <a href="/Users/MyPhotos" class="list-group-item">
+                        <span class="glyphicon glyphicon-camera"></span> My photos <span class="badge"></span>
+                    </a>
+                    <a href="/Users/MyGroups" class="list-group-item">
+                        <span class="glyphicon glyphicon-link"></span> My groups <span class="badge"></span>
+                    </a>
+                    <a href="/Users/MyFriends" class="list-group-item">
+                        <span class="glyphicon glyphicon-user"></span> My friends <span class="badge"></span>
+                    </a>
+                    <a href="/Users/MyMusic" class="list-group-item">
+                        <span class="glyphicon glyphicon-music"></span> My music <span class="badge"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
