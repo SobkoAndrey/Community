@@ -201,6 +201,14 @@
     <Compile Include="Migrations\201703071421509_df.Designer.cs">
       <DependentUpon>201703071421509_df.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703080410551_photoImage.cs" />
+    <Compile Include="Migrations\201703080410551_photoImage.Designer.cs">
+      <DependentUpon>201703080410551_photoImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703080431027_genderNull.cs" />
+    <Compile Include="Migrations\201703080431027_genderNull.Designer.cs">
+      <DependentUpon>201703080431027_genderNull.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -297,6 +305,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703071421509_df.resx">
       <DependentUpon>201703071421509_df.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703080410551_photoImage.resx">
+      <DependentUpon>201703080410551_photoImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703080431027_genderNull.resx">
+      <DependentUpon>201703080431027_genderNull.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

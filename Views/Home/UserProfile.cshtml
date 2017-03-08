@@ -10,7 +10,14 @@
         <div class="container-fluid" style="padding-top: 2%">
             <div class="row" style="margin-left: auto">
                 <div class="col-md-4">
-                    <img src="~/Images/t.jpg" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                    @if (Model.Photo == null)
+                    {
+                        <img src="~/Images/no-avatar.png" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                    }
+                    else
+                    {
+                        <img src=@Model.Photo.Path alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                    }
                     <br />
                     <form action="@Url.Action("UploadPhoto")" method="post" enctype="multipart/form-data">
                         <div>Upload new photo</div>
@@ -26,17 +33,44 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <span>Gender: man</span>
+                            @{
+                                if (Model.Gender != null)
+                                {
+                                    <span>Пол: @Model.Gender</span>
+                                }
+                                else
+                                {
+                                    <span>Пол: </span>
+                                }
+                            }
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <span>Location: Karaganda</span>
+                            @{
+                                if (Model.Location != null)
+                                {
+                                    <span>Город: @Model.Location</span>
+                                }
+                                else
+                                {
+                                    <span>Город: </span>
+                                }
+                            }
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <span>Birthday: 19.01.1990</span>
+                            @{
+                                if (Model.Birthday != null)
+                                {
+                                    <span>День рождения: @Model.Birthday</span>
+                                }
+                                else
+                                {
+                                    <span>День рождения: </span>
+                                }
+                            }
                         </div>
                     </div>
                     <br />

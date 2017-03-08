@@ -20,8 +20,8 @@ namespace Community3.Models
     public class AppUser : IdentityUser
     {
 
-        public Gender Gender { get; set; }
-        public string Photo { get; set; }
+        public Gender? Gender { get; set; }
+        public Image Photo { get; set; }
         public string Location { get; set; }
 
         [DataType(DataType.Date)]
