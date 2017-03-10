@@ -1,0 +1,11 @@
+﻿@using Community3.Models
+
+@model Gender
+
+@foreach (Gender gender in Enum.GetValues(typeof(Gender)))
+{
+    if (gender == Model)
+    {
+        @gender
+    }
+}

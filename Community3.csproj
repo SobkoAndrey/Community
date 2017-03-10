@@ -168,6 +168,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -208,6 +209,22 @@
     <Compile Include="Migrations\201703080431027_genderNull.cs" />
     <Compile Include="Migrations\201703080431027_genderNull.Designer.cs">
       <DependentUpon>201703080431027_genderNull.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703080846039_changeImage.cs" />
+    <Compile Include="Migrations\201703080846039_changeImage.Designer.cs">
+      <DependentUpon>201703080846039_changeImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703100524594_description.cs" />
+    <Compile Include="Migrations\201703100524594_description.Designer.cs">
+      <DependentUpon>201703100524594_description.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703100539568_registerGender.cs" />
+    <Compile Include="Migrations\201703100539568_registerGender.Designer.cs">
+      <DependentUpon>201703100539568_registerGender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703100555552_genderEmpty.cs" />
+    <Compile Include="Migrations\201703100555552_genderEmpty.Designer.cs">
+      <DependentUpon>201703100555552_genderEmpty.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -272,6 +289,11 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\UserProfile.cshtml" />
+    <Content Include="Views\Home\EditProfile.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\GenderTemplate.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\GenderTemplate.cshtml" />
+    <Content Include="Views\Home\ChangePhoto.cshtml" />
+    <Content Include="Views\Group\ShowGroupPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -311,6 +333,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703080431027_genderNull.resx">
       <DependentUpon>201703080431027_genderNull.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703080846039_changeImage.resx">
+      <DependentUpon>201703080846039_changeImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703100524594_description.resx">
+      <DependentUpon>201703100524594_description.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703100539568_registerGender.resx">
+      <DependentUpon>201703100539568_registerGender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703100555552_genderEmpty.resx">
+      <DependentUpon>201703100555552_genderEmpty.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

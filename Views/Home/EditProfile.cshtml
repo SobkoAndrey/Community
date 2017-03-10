@@ -1,0 +1,46 @@
+﻿@model Community3.Models.AppUser
+
+@{
+    ViewBag.Title = "EditProfile";
+}
+
+<body>
+
+    <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12" style="text-align:center">
+                    @using (Html.BeginForm("EditProfile", "Home"))
+                    {
+                        <div>
+                            <label>Gender</label><br />
+                            @Html.EditorFor(user => user.Gender, "GenderTemplate")
+                        </div>
+                        <br />
+                        <div>
+                            <label>Location</label><br />
+                            @Html.EditorFor(user => user.Location)
+                        </div>
+                        <br />
+                        <div>
+                            <label>Birthday</label><br />
+                            @Html.EditorFor(user => user.Birthday)
+                        </div>
+                        <br />
+                        <div>
+                            <label>Description</label><br />
+                            @Html.EditorFor(user => user.Description)
+                        </div>
+                        <br />
+                        <div>
+                            <input type="submit" name="submit" />
+                        </div>
+                        <br />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+

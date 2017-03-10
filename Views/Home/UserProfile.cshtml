@@ -10,20 +10,15 @@
         <div class="container-fluid" style="padding-top: 2%">
             <div class="row" style="margin-left: auto">
                 <div class="col-md-4">
-                    @if (Model.Photo == null)
+                    @if (Model.Photo != null)
                     {
-                        <img src="~/Images/no-avatar.png" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                        <img src="@Url.Content(Model.Photo.Path)" alt="fgj" title="fgn" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
                     }
                     else
                     {
-                        <img src=@Model.Photo.Path alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                        <img src="~/Images/no-avatar.png" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
                     }
                     <br />
-                    <form action="@Url.Action("UploadPhoto")" method="post" enctype="multipart/form-data">
-                        <div>Upload new photo</div>
-                        <input type="file" name="photo" lang="en-us" /> <br />
-                        <input type="submit" lang="en-us" />
-                    </form>
                 </div>
                 <div class="col-md-8">
                     <div class="row">
@@ -34,7 +29,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             @{
-                                if (Model.Gender != null)
+                                if (Model.Gender != Community3.Models.Gender.Empty)
                                 {
                                     <span>Пол: @Model.Gender</span>
                                 }
@@ -59,12 +54,13 @@
                             }
                         </div>
                     </div>
+                    
                     <div class="row">
                         <div class="col-md-12">
                             @{
                                 if (Model.Birthday != null)
                                 {
-                                    <span>День рождения: @Model.Birthday</span>
+                                    <span>День рождения: @Model.Birthday.Value.ToShortDateString()</span>
                                 }
                                 else
                                 {
@@ -74,11 +70,19 @@
                         </div>
                     </div>
                     <br />
+                    @if (ViewBag.Access != "Denied")
+                    {
                     <div class="row">
                         <div class="col-md-12">
-                            @Html.ActionLink("Change info", "EditProfile", "Users") <br />
+                            @Html.ActionLink("Change info", "EditProfile", "Home") <br />
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.ActionLink("Change photo", "ChangePhoto", "Home") <br />
+                        </div>
+                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -87,7 +91,7 @@
             <div class="col-md-12">
                 <h4>About user:</h4>
                 <div>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget tortor felis. Pellentesque gravida euismod tempor. Nunc vel lectus a sem ultricies tincidunt non sed enim. Proin quis urna quis sem ultricies feugiat nec non mi. Fusce nibh urna, tempus eget lorem eu, porttitor ultricies ex. Fusce est orci, vehicula non suscipit id, mattis ut leo. Nulla porttitor libero non est pretium feugiat. Nunc eget turpis sit amet lorem dictum efficitur. Etiam ac eros luctus, consequat diam id, venenatis dolor. Ut sagittis malesuada elit at dignissim. Curabitur sit amet aliquam enim. Quisque ante turpis, eleifend ac magna eu, fermentum auctor sapien. Nulla scelerisque mi massa, ut tempus erat venenatis eget. Cras et tortor convallis est lacinia tincidunt nec at turpis. Cras eget erat ultrices, suscipit ligula vel, ullamcorper ex. Pellentesque sed luctus massa, ut tincidunt enim.
+                    @Model.Description
                 </div>
             </div>
         </div>
@@ -95,24 +99,20 @@
         <div class="row" style="margin-left: auto">
             <div class="col-md-12">
                 <h4>Groups:</h4>
-                <ul>
-                    <li>Lorem ipsum dolor sit amet</li>
-                    <li>Lorem ipsum dolor sit amet</li>
-                    <li>Lorem ipsum dolor sit amet</li>
-                    <li>Lorem ipsum dolor sit amet</li>
-                </ul>
+                @foreach(var group in Model.Groups)
+                {
+                    @Html.ActionLink(group.Name, "ShowGroupPage", "Group") <br />
+                }
             </div>
         </div>
         <hr />
         <div class="row" style="margin-left: auto">
             <div class="col-md-12">
                 <h4>Friends:</h4>
-                <ul>
-                    <li>Lorem ipsum dolor sit amet</li>
-                    <li>Lorem ipsum dolor sit amet</li>
-                    <li>Lorem ipsum dolor sit amet</li>
-                    <li>Lorem ipsum dolor sit amet</li>
-                </ul>
+                @foreach (var user in Model.Friends)
+                {
+                    @Html.ActionLink(user.UserName, "ShowUserProfile", "Home", new { id = user.Id}, null) <br />
+                }
             </div>
         </div>
     </div>

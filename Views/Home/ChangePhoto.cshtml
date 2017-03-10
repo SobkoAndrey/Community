@@ -1,0 +1,14 @@
+﻿@model Community3.Models.AppUser
+
+<form action="@Url.Action("ChangePhoto")" method="post" enctype="multipart/form-data">
+    <div>Upload new photo</div>
+    <input type="file" name="file" lang="en-us" /> <br />
+    <input type="submit" lang="en-us" />
+</form>
+@{
+
+    if (Model.Photo != null)
+    {
+    @:<img src="@Url.Content(Model.Photo.Path)" alt="fgj" title="fgn" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+    }
+}

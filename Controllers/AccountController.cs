@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Community3.Models;
+using System.IO;
 
 namespace Community3.Controllers
 {
@@ -151,7 +152,8 @@ namespace Community3.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new AppUser { UserName = model.Email, Email = model.Email };
+
+                var user = new AppUser { UserName = model.Email, Email = model.Email, Gender = Gender.Empty };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

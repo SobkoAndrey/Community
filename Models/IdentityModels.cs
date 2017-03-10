@@ -14,7 +14,8 @@ namespace Community3.Models
     public enum Gender
     {
         Male,
-        Female
+        Female,
+        Empty
     }
 
     public class AppUser : IdentityUser
@@ -23,6 +24,9 @@ namespace Community3.Models
         public Gender? Gender { get; set; }
         public Image Photo { get; set; }
         public string Location { get; set; }
+
+        [UIHint("MultilineText")]
+        public string Description { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? Birthday { get; set; }
@@ -93,12 +97,10 @@ namespace Community3.Models
 
     public class Image
     {
-        [Required]
         public int ImageId { get; set; }
         [Required]
         public string Path { get; set; }
         [Required]
-        [MaxLength(50), MinLength(1)]
         public string Name { get; set; }
 
         public virtual ICollection<AppUser> OwnersUsers { get; set; }
