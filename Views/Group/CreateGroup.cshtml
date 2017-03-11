@@ -1,0 +1,32 @@
+﻿@model Community3.Models.GroupCreationModel
+@{
+    ViewBag.Title = "CreateGroup";
+}
+
+<body>
+    <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12" style="text-align:center">
+                    @using (Html.BeginForm("CreateGroup", "Group"))
+                    {
+                        <div>
+                            <label>Название группы</label><br />
+                            @Html.EditorFor(g => g.Name)
+                        </div>
+                        <br />
+                        <div>
+                            <label>Описание группы</label><br />
+                            @Html.EditorFor(g => g.Description)
+                        </div>
+                        <br />
+                        <div>
+                            <input type="submit" name="submit" />
+                        </div>
+                        <br />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

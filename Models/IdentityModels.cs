@@ -22,7 +22,10 @@ namespace Community3.Models
     {
 
         public Gender? Gender { get; set; }
+
+        public int? PhotoId { get; set; }
         public Image Photo { get; set; }
+
         public string Location { get; set; }
 
         [UIHint("MultilineText")]
@@ -60,8 +63,20 @@ namespace Community3.Models
         [MaxLength(50), MinLength(1)]
         public string Name { get; set; }
 
+        [UIHint("MultilineText")]
+        public string Description { get; set; }
+
+        [ForeignKey("Image")]
+        public int? ImageId { get; set; }
+
+        public virtual Image Image { get; set; }
+
         [Required]
-        public AppUser Owner { get; set; }
+        [ForeignKey("Owner")]
+        public string OwnerId { get; set; }
+        [Required]
+        public virtual AppUser Owner { get; set; }
+
         public DateTime CreationDate { get; set; }
         public virtual ICollection<AppUser> GroupUsers { get; set; }
         public virtual ICollection<Image> Images { get; set; }
@@ -138,5 +153,6 @@ namespace Community3.Models
         {
             return new ApplicationDbContext();
         }
+
     }
 }

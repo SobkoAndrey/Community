@@ -7,9 +7,9 @@
     <title>@ViewBag.Title – приложение ASP.NET</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    <link href="@Url.Content("~/style.css")" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body class="MainBack">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -33,8 +33,8 @@
                     <a href="/Users/MyPhotos" class="list-group-item">
                         <span class="glyphicon glyphicon-camera"></span> My photos <span class="badge"></span>
                     </a>
-                    <a href="/Users/MyGroups" class="list-group-item">
-                        <span class="glyphicon glyphicon-link"></span> My groups <span class="badge"></span>
+                    <a href="/Home/Groups" class="list-group-item">
+                        <span class="glyphicon glyphicon-link"></span> Мои группы <span class="badge"></span>
                     </a>
                     <a href="/Users/MyFriends" class="list-group-item">
                         <span class="glyphicon glyphicon-user"></span> My friends <span class="badge"></span>
@@ -43,6 +43,18 @@
                         <span class="glyphicon glyphicon-music"></span> My music <span class="badge"></span>
                     </a>
                 </div>
+                    @if (IsSectionDefined("Group"))
+                    {
+                        <div>
+                            @RenderSection("Group")
+                        </div>
+                    }
+                    @if (IsSectionDefined("CreateGroup"))
+                    {
+                        <div>
+                            @RenderSection("CreateGroup")
+                        </div>
+                    }
             </div>
         </div>
     </div>

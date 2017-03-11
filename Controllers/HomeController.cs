@@ -27,11 +27,12 @@ namespace Community3.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Groups()
         {
-            ViewBag.Message = "Your application description page.";
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            ViewBag.Groups = ApplicationDbContext.Groups.ToList();
 
-            return View();
+            return View(user);
         }
 
         public ActionResult Contact()
@@ -43,10 +44,10 @@ namespace Community3.Controllers
 
         public ActionResult UserProfile()
         {
-            var friend = ApplicationDbContext.Users.Where(u => u.Id == "7ee4f15b-a7bb-4196-aff2-96a640c87d46").FirstOrDefault();
-
             var user = UserManager.FindById(User.Identity.GetUserId());
-            user.Friends.Add(friend);
+            var userImageId = user.PhotoId;
+            var userPhoto = ApplicationDbContext.Images.Where(i => i.ImageId == userImageId).SingleOrDefault();
+            user.Photo = userPhoto;
             return View(user);
         }
 
@@ -54,7 +55,6 @@ namespace Community3.Controllers
         {
 
             ViewBag.Access = "Denied";
-
             var user = ApplicationDbContext.Users.Where(u => u.Id == id).FirstOrDefault();
             return View("UserProfile", user);
         }
@@ -103,15 +103,17 @@ namespace Community3.Controllers
             if (extensions.Contains(extension))
             {
                 file.SaveAs(Server.MapPath("~/Images/" + fileName));
-                using (ApplicationDbContext context = new ApplicationDbContext())
+                using (ApplicationDbContext)
                 {
                     Image photo = new Image();
                     photo.Path = "~/Images/" + fileName;
                     photo.Name = fileName;
-                    context.Images.Add(photo);
-                    context.SaveChanges();
 
-                    var image = context.Images.Where(i => i.Name == fileName).FirstOrDefault();
+                    ApplicationDbContext.Images.Add(photo);
+                    ApplicationDbContext.SaveChanges();
+
+                    var image = ApplicationDbContext.Images.Where(i => i.Name == fileName).FirstOrDefault();
+                    user.PhotoId = image.ImageId;
                     user.Photo = image;
                     var result = await UserManager.UpdateAsync(user);
                 }
@@ -119,7 +121,7 @@ namespace Community3.Controllers
             }
             else
             {
-                ViewBag.Message = "Неправильный тип файла";
+                return View("WrongFileExtensionError");
             }
             
             return RedirectToAction("UserProfile");

@@ -226,8 +226,25 @@
     <Compile Include="Migrations\201703100555552_genderEmpty.Designer.cs">
       <DependentUpon>201703100555552_genderEmpty.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703100840129_group.cs" />
+    <Compile Include="Migrations\201703100840129_group.Designer.cs">
+      <DependentUpon>201703100840129_group.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703111020017_photoId.cs" />
+    <Compile Include="Migrations\201703111020017_photoId.Designer.cs">
+      <DependentUpon>201703111020017_photoId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703111118119_groupImageId.cs" />
+    <Compile Include="Migrations\201703111118119_groupImageId.Designer.cs">
+      <DependentUpon>201703111118119_groupImageId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201703111126432_groupOwnerId.cs" />
+    <Compile Include="Migrations\201703111126432_groupOwnerId.Designer.cs">
+      <DependentUpon>201703111126432_groupOwnerId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\GroupCreationModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -265,8 +282,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -294,6 +309,9 @@
     <Content Include="Views\Shared\DisplayTemplates\GenderTemplate.cshtml" />
     <Content Include="Views\Home\ChangePhoto.cshtml" />
     <Content Include="Views\Group\ShowGroupPage.cshtml" />
+    <Content Include="Views\Home\Groups.cshtml" />
+    <Content Include="Views\Group\CreateGroup.cshtml" />
+    <Content Include="Views\Shared\WrongFileExtensionError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -345,6 +363,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703100555552_genderEmpty.resx">
       <DependentUpon>201703100555552_genderEmpty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703100840129_group.resx">
+      <DependentUpon>201703100840129_group.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703111020017_photoId.resx">
+      <DependentUpon>201703111020017_photoId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703111118119_groupImageId.resx">
+      <DependentUpon>201703111118119_groupImageId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703111126432_groupOwnerId.resx">
+      <DependentUpon>201703111126432_groupOwnerId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,50 @@
+﻿@using Community3.Models
+@model AppUser
+
+@{
+    ViewBag.Title = "Groups";
+}
+
+<body>
+
+    <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-4">
+                    <h2>Мои группы</h2>
+                </div>
+            </div>
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12">
+                    <h4>Основано:</h4> <br />
+                    @foreach (Group group in ViewBag.Groups)
+                    {
+                        if (group.Owner.Id == Model.Id)
+                        {
+                            @Html.ActionLink(group.Name, "ShowGroupPage", "Group", new { id = group.GroupId }, null); @:<br />
+                    }
+                    }
+                </div>
+            </div>
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-4">
+                    <h4>Присоединился:</h4>
+                    @foreach (Group group in Model.Groups)
+                    {
+                        @Html.ActionLink(group.Name, "ShowGroupPage", "Group", new { id = group.GroupId }, null); @:<br />
+                }
+                </div>
+            </div>
+            <div class="row" style="margin-left: auto">
+
+            </div>
+        </div>
+    </div>
+</body>
+
+@section CreateGroup{
+    <div style="text-align:center">
+        <a href="/Group/CreateGroup" class="btn btn-primary" role="button">Основать группу</a>
+    </div>
+}
+

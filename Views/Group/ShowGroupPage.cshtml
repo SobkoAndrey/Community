@@ -4,5 +4,66 @@
     ViewBag.Title = "ShowGroupPage";
 }
 
-<h2>ShowGroupPage</h2>
+<body>
+
+    <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12" style="text-align:center">
+                    <h2>@Model.Name</h2>
+                </div>
+            </div>
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12" style="text-align:center">
+                    <h3>@Model.Description</h3>
+                </div>
+            </div>
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12" style="text-align:center">
+                    <h4>Основатель @Html.ActionLink(Model.Owner.UserName, "UserProfile", "Home", new { id = Model.Owner.Id }, null)</h4>
+                </div>
+            </div>
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12" style="text-align:center">
+                    <h4>Группа создана @Model.CreationDate.ToShortDateString()</h4>
+                </div>
+            </div>
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12" style="text-align:center">
+                    <h4>@Html.ActionLink("Список участников", "ShowParticipants", "Group", new { id = Model.GroupId }, null)</h4>
+                </div>
+            </div>
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12" style="text-align:center">
+                    <h4>@Html.ActionLink("Показать все изображения", "ShowImages", "Group", new { id = Model.GroupId }, null)</h4>
+                </div>
+            </div>
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12" style="text-align:center">
+                    <h4>@Html.ActionLink("Аудиозаписи группы", "ShowAudio", "Group", new { id = Model.GroupId }, null)</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Group{
+    @if (Model.Image != null)
+    {
+        <img src="@Url.Content(Model.Image.Path)" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+        <br />
+        <div class="MainWindow" style="text-align:center">
+            <div style="font-size:large">@Model.Name</div>
+        </div>
+    }
+    else
+    {
+        <img src="~/Images/no-image.jpg" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+        <br />
+        <div class="MainWindow" style="text-align:center">
+            <div style="font-size:large">@Model.Name</div>
+        </div>
+    }
+}
+
 
