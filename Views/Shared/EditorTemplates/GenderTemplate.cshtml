@@ -4,6 +4,17 @@
 <select id="Gender" name="Gender">
     @foreach (Gender gender in Enum.GetValues(typeof(Gender)))
     {
-        <option value="@gender" @(Model == gender ? "selected=\"selected\"" : "")>@gender</option>
+        if (gender == Gender.Male)
+        {
+        <option value="@gender" @(Model == gender ? "selected=\"selected\"" : "")>Мужской</option>
+        }
+        else if (gender == Gender.Female)
+        {
+            <option value="@gender" @(Model == gender ? "selected=\"selected\"" : "")>Женский</option>
+        }
+        else
+        {
+            <option value="@gender" @(Model == gender ? "selected=\"selected\"" : "")>Не указано</option>
+        }
     }
 </select> 

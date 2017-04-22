@@ -9,7 +9,7 @@ namespace Community3.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             ContextKey = "Community3.Models.ApplicationDbContext";
         }
 

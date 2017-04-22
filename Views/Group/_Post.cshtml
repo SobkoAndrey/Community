@@ -1,0 +1,89 @@
+﻿@model Community3.Models.Post
+<div id="@Model.PostId">
+    <input id="postId" type="hidden" value="@Model.PostId" />
+    <div class="row">
+        <div class="col-md-2">
+            @if (Model.Group != null)
+            {
+                <img src="@Url.Content(Model.Group.Image.Path)" alt="Фотография сообщества" title="@Model.Group.Image.Label" style="max-width: 100%; height:auto; border-radius: 10%" />
+            }
+            else if (Model.AppUser != null)
+            {
+                if (Model.AppUser.Photo != null)
+                {
+                    <img src="@Url.Content(Model.AppUser.Photo.Path)" alt="Фотография пользователя" title="@Model.AppUser.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
+                }
+                else
+                {
+                    <img src="@Url.Content("~/Images/no-avatar.png")" alt="Фотография пользователя" title="@Model.AppUser.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
+                }
+            }
+        </div>
+        <div class="col-md-4">
+            <div style="text-align:left; font-weight:600">
+                @Model.Group.Name
+            </div>
+            <div style="text-align:left">
+                @Model.CreationDate.ToString("d MMM H:m")
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div style="text-align:right">
+                @if (Model.Group.OwnerId == ViewBag.userId)
+            {
+                    <button id="@Model.PostId" class="btn btn-danger">Удалить новость</button>
+                }
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h4 style="text-align:left">@Model.Name</h4>
+    <div style="text-align:left">@Model.Text</div>
+
+    <div>
+        <br />
+        @if (Model.Images.Count == 1)
+        {
+            <img src="@Url.Content(Model.Images.First().Path)" title="@Model.Images.First().Label" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+        }
+        else if (Model.Images.Count < 4)
+        {
+            foreach (var image in Model.Images)
+            {
+                <img src="@Url.Content(image.Path)" title="@image.Label" style="max-width: 30%; height:auto; border-radius: 10%" />
+            }
+        }
+        else
+        {
+            foreach (var image in Model.Images)
+            {
+                <img src="@Url.Content(image.Path)" alt="fgj" title="fgn" style="max-width: 30%; height:auto; border-radius: 10%; padding-bottom:4px" />
+            }
+        }
+    </div>
+    <div>
+        <br />
+        @foreach (var audio in Model.Audios)
+        {
+            <div>@audio.Label</div>
+            <audio controls>
+                <source src="@Url.Content(audio.Path)" type="audio/mpeg">
+            </audio>
+        }
+    </div>
+    <hr />
+    <div style="text-align:left">
+        <button id="@Model.PostId" type="button" class="btn btn-default btn-sm">
+            @if (Model.GetUsersLikedIdList().Contains(ViewBag.userId))
+            {
+                <span class="glyphicon glyphicon-heart"></span> @:Мне нравится <span id="@Model.PostId">@Model.Likes.Count</span>
+        }
+            else
+            {
+                <span class="glyphicon glyphicon-heart-empty"></span> @:Мне нравится <span id="@Model.PostId">@Model.Likes.Count</span>
+        }
+        </button>
+    </div>
+    <br />
+    <div style="height:1px; background-color: black"></div><br />
+</div>

@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Community3.Models.Image>
+
+@if (Model != null)
+{
+    foreach (var image in Model)
+    {
+        <img src="@Url.Content(image.Path)" alt="@image.Label" title="@image.Label" style="max-width: 30%; height:auto; border-radius: 10%" />
+        <hr />
+    }
+}

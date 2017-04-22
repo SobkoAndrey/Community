@@ -1,0 +1,56 @@
+﻿@model Community3.Models.Group
+@{
+    ViewBag.Title = "ManageGroup";
+}
+
+<div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
+    <div class="container-fluid" style="padding-top: 2%">
+        <div class="row" style="margin-left: auto">
+            <div class="col-md-12" style="text-align:center">
+                <form action="@Url.Action("ChangeImage", "Group", new { id = Model.GroupId})" method="post" enctype="multipart/form-data">
+                    <div style="font-weight:600">Загрузить фотографию</div>
+                    <div style="display:inline-block">
+                        <input type="file" name="file" lang="en-us" />
+                    </div> <br />
+                    <input type="submit" value="Загрузить" lang="en-us" /> @ViewBag.Avatar
+                </form>
+                <br />
+                @using (Html.BeginForm("EditGroupInfo", "Group"))
+                {
+                    <input type="hidden" name="id" value="@Model.GroupId" />
+                    <div>
+                        @Html.LabelFor(g => g.Name) <br />
+                        @Html.EditorFor(g => g.Name)
+                    </div>
+                    <br />
+                    <div>
+                        @Html.LabelFor(g => g.Description) <br />
+                        @Html.EditorFor(g => g.Description)
+                    </div>
+                    <br />
+                    <div>
+                        <input type="submit" name="submit" value="Подтвердить" /> @ViewBag.Info
+                    </div>
+                    <br />
+                }
+                <form action="@Url.Action("AddPhotoToAlbum", "Group", new { id = Model.GroupId})" method="post" enctype="multipart/form-data">
+                    <div style="font-weight:600">Загрузить фотографию в альбом</div>
+                    <div style="display:inline-block">
+                        <input type="file" name="file" lang="en-us" />
+                    </div> <br />
+                    <input type="submit" value="Загрузить" lang="en-us" /> @ViewBag.Image
+                </form>
+                <br />
+                <form action="@Url.Action("AddAudioToAlbum", "Group", new { id = Model.GroupId})" method="post" enctype="multipart/form-data">
+                    <div style="font-weight:600">Загрузить аудиозапись в группу</div>
+                    <div style="display:inline-block">
+                        <input type="file" name="file" lang="en-us" />
+                    </div> <br />
+                    <input type="submit" value="Загрузить" lang="en-us" /> @ViewBag.Audio
+                </form>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+

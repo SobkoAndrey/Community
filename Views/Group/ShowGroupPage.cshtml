@@ -1,7 +1,22 @@
-﻿@model Community3.Models.Group
+﻿@using Community3.Models
+@model Group
 
 @{
     ViewBag.Title = "ShowGroupPage";
+    var audios = Model.Audios.ToArray();
+    var images = Model.Images.ToArray();
+    var postList = Model.Posts.ToList().OrderBy(_=>_.CreationDate).Reverse();
+    var usersIds = new List<string>();
+    foreach (var user in Model.AppUsers)
+    {
+        usersIds.Add(user.Id);
+    }
+
+    var blockUsersIds = new List<string>();
+    foreach (var user in Model.BlockUsers)
+    {
+        blockUsersIds.Add(user.Id);
+    }
 }
 
 <body>
@@ -13,41 +28,138 @@
                     <h2>@Model.Name</h2>
                 </div>
             </div>
+            <div class="row" style="margin-left: auto; margin-right: auto">
+                <div class="col-md-12" style="text-align:center">
+                    <h4 style="word-wrap:break-word">@Model.Description</h4>
+                </div>
+            </div>
+            @if (Model.OwnerId == ViewBag.userId)
+            {
+                <div class="row" style="margin-left: auto">
+                    <div style="text-align:center">
+                        <a href="/Group/ManageGroup/@Model.GroupId" class="btn btn-primary" role="button">Управление группой</a>
+                    </div>
+                </div>
+            }
             <div class="row" style="margin-left: auto">
                 <div class="col-md-12" style="text-align:center">
-                    <h3>@Model.Description</h3>
+                    <h5>Основатель @Html.ActionLink(Model.Owner.FullName, "UserProfile", "Home", new { id = Model.Owner.Id }, null)</h5>
                 </div>
             </div>
             <div class="row" style="margin-left: auto">
                 <div class="col-md-12" style="text-align:center">
-                    <h4>Основатель @Html.ActionLink(Model.Owner.UserName, "UserProfile", "Home", new { id = Model.Owner.Id }, null)</h4>
+                    <h5>Группа создана @Model.CreationDate.ToShortDateString()</h5>
                 </div>
             </div>
-            <div class="row" style="margin-left: auto">
-                <div class="col-md-12" style="text-align:center">
-                    <h4>Группа создана @Model.CreationDate.ToShortDateString()</h4>
+            @if (usersIds.Contains(ViewBag.userId) || (Model.OwnerId == ViewBag.userId))
+            {
+                <div class="row" style="margin-left: auto">
+                    <div class="col-md-12" style="text-align:center">
+                        <h5>@Html.ActionLink("Список участников", "ShowParticipants", "Group", new { id = Model.GroupId }, null)</h5>
+                    </div>
                 </div>
-            </div>
-            <div class="row" style="margin-left: auto">
-                <div class="col-md-12" style="text-align:center">
-                    <h4>@Html.ActionLink("Список участников", "ShowParticipants", "Group", new { id = Model.GroupId }, null)</h4>
+                <div class="row" style="margin-left: auto; margin-right:auto">
+
+                    <h5 style="font-weight:600; text-align:center">Фотографии группы</h5>
+                    <div style="text-align:center">
+                        @if (Model.Images.Count >= 3)
+                        {
+                            for (var i = 0; i < 3; i += 1)
+                            {
+                                <div class="col-md-4" style="text-align:center">
+                                    <div>@images[i].Label</div>
+                                    <img src="@Url.Content(images[i].Path)" alt="Фотография сообщества" title="@images[i].Label" style="width:150px; height:auto; border-radius: 10%" /><br />
+                                </div>
+                            }
+                        }
+                        else if (Model.Images.Count == 2)
+                        {
+                            for (var i = 0; i < 2; i += 1)
+                            {
+                                <div class="col-md-4" style="text-align:center">
+                                    <div>@images[i].Label</div>
+                                    <img src="@Url.Content(images[i].Path)" alt="Фотография сообщества" title="@images[i].Label" style="width:150px; height:auto; border-radius: 10%" /><br />
+                                </div>
+                            }
+                        }
+                        else if (Model.Images.Count == 1)
+                        {
+                            <div class="col-md-4" style="text-align:center">
+                                <div>@images[0].Label</div>
+                                <img src="@Url.Content(images[0].Path)" alt="Фотография сообщества" title="@images[0].Label" style="width:150px; height:auto; border-radius: 10%" /><br />
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
-            <div class="row" style="margin-left: auto">
-                <div class="col-md-12" style="text-align:center">
-                    <h4>@Html.ActionLink("Показать все изображения", "ShowImages", "Group", new { id = Model.GroupId }, null)</h4>
+                <h5 style="text-align:center">@Html.ActionLink("Все изображения", "ShowImages", "Group", new { id = Model.GroupId }, null)</h5>
+                <div class="row" style="margin-left: auto; margin-right:auto">
+                    <div class="col-md-12" style="text-align:center">
+                        <h5 style="font-weight:600">Аудиозаписи группы</h5>
+                        @if (Model.Audios.Count >= 3)
+                        {
+                            for (var i = 0; i < 3; i += 1)
+                            {
+                                <div>@audios[i].Label</div>
+                                <audio controls>
+                                    <source src="@Url.Content(audios[i].Path)" type="audio/mpeg">
+                                </audio>
+                            }
+                        }
+                        else if (Model.Audios.Count == 2)
+                        {
+                            for (var i = 0; i < 2; i += 1)
+                            {
+                                <div>@audios[i].Label</div>
+                                <audio controls>
+                                    <source src="@Url.Content(audios[i].Path)" type="audio/mpeg">
+                                </audio>
+                            }
+                        }
+                        else if (Model.Audios.Count == 1)
+                        {
+                            <div>@audios[0].Label</div>
+                            <audio controls>
+                                <source src="@Url.Content(audios[0].Path)" type="audio/mpeg">
+                            </audio>
+                        }
+                        <h5>@Html.ActionLink("Все аудиозаписи", "ShowAudio", "Group", new { id = Model.GroupId }, null)</h5>
+                    </div>
                 </div>
-            </div>
-            <div class="row" style="margin-left: auto">
-                <div class="col-md-12" style="text-align:center">
-                    <h4>@Html.ActionLink("Аудиозаписи группы", "ShowAudio", "Group", new { id = Model.GroupId }, null)</h4>
+                <div class="row" style="margin-left: auto; margin-right:auto">
+                    <div class="col-md-12" style="text-align:center">
+                        <h5 style="font-weight:600">Новости группы</h5>
+                        @if (Model.OwnerId == ViewBag.userId)
+                        {
+                            <div class="row" style="margin-left: auto">
+                                <div style="text-align:center">
+                                    <a href="/Group/AddPost/@Model.GroupId" class="btn btn-primary" role="button">Добавить новость</a>
+                                </div>
+                            </div>
+                            <br />
+                        }
+                        @foreach(var post in postList)
+                        {
+                            @Html.Partial("_Post", post);
+                        }
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="row" style="margin-left: auto">
+                    <div class="col-md-12" style="text-align:center">
+                        <h4>
+                            Контент группы открыт только для подписчиков
+                        </h4>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </body>
 
-@section Group{
+@section Group 
+    {
     @if (Model.Image != null)
     {
         <img src="@Url.Content(Model.Image.Path)" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
@@ -66,4 +178,90 @@
     }
 }
 
+@section GroupRelation 
+    {
+    @if (Model.OwnerId != ViewBag.userId)
+    {
+        if (usersIds.Contains(ViewBag.userId))
+        {
+            <br />
+            <div style="text-align:center">
+                <a href="/Group/Unsubscribe/@Model.GroupId" class="btn btn-primary" role="button">Отписаться</a>
+            </div>
+        }
+        else
+        {
+            if (blockUsersIds.Contains(ViewBag.userId))
+            {
+                <br />
+                <div class="MainWindow" style="text-align:center">
+                    <span style="font-weight:600">Вы заблокированы администратором группы</span>
+                </div>
+            }
+            else
+            {
+                <br />
+                <div style="text-align:center">
+                    <a href="/Group/Subscribe/@Model.GroupId" class="btn btn-primary" role="button">Подписаться</a>
+                </div>
+            }
+        }
+    }
+}
 
+
+@section scripts{
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+                $('.btn-sm').click(function (e) {
+                    e.preventDefault();
+                    var postId = $(this).attr('id');
+                    var like = $("#" + postId + " span:last");
+                    var heart = $("#" + postId + " span:first");
+                    var data = new FormData();
+                    data.append('postId', postId);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("AddLike", "Group")',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            like.empty();
+                            like.append(result);
+                            heart.removeClass('glyphicon glyphicon-heart-empty').addClass('glyphicon glyphicon-heart');
+                        },
+                        error: function (xhr, status, p3) {
+                            alert(xhr.responsetext);
+                        }
+                    });
+                });
+            });
+
+            $(document).ready(function () {
+                $('.btn-danger').click(function (e) {
+                    e.preventDefault();
+                    var postId = $(this).attr('id');
+                    var postDiv = $('div').filter('#' + postId);
+                    var data = new FormData();
+                    data.append('postId', postId);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("RemovePost", "Group")',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            postDiv.hide(200);
+                        },
+                        error: function (xhr, status, p3) {
+                            alert(xhr.responsetext);
+                        }
+                    });
+                });
+            });
+        </script>
+    }

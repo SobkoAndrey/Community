@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Community3.Models.Audio>
+
+@if (Model != null)
+{
+    foreach (var audio in Model)
+    {
+        <div>@audio.Label</div>
+        <audio controls>
+            <source src="@Url.Content(audio.Path)" type="audio/mpeg">
+        </audio>
+    }
+}

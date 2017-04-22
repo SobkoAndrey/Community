@@ -20,20 +20,38 @@ namespace Community3.Models
 
     public class AppUser : IdentityUser
     {
+        [Required]
+        [MaxLength(15), MinLength(2)]
+        public string Name { get; set; }
 
-        public Gender? Gender { get; set; }
+        [Required]
+        [MaxLength(20)]
+        public string Surname { get; set; }
 
+        public string FullName
+        {
+            get
+            {
+                return Name + " " + Surname;
+            }
+        }
+
+        public Gender Gender { get; set; }
+
+        [ForeignKey("Photo")]
         public int? PhotoId { get; set; }
-        public Image Photo { get; set; }
+        public virtual Image Photo { get; set; }
 
         public string Location { get; set; }
 
         [UIHint("MultilineText")]
         public string Description { get; set; }
-
+        
         [DataType(DataType.Date)]
+        [RegularExpression(@"\d\d\.\d\d\.\d\d\d\d", ErrorMessage = "Некорректная дата")]
         public DateTime? Birthday { get; set; }
 
+        public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Audio> Audios { get; set; }
         public virtual ICollection<AppUser> Friends { get; set; }
@@ -45,6 +63,7 @@ namespace Community3.Models
             this.Audios = new HashSet<Audio>();
             this.Friends = new HashSet<AppUser>();
             this.Groups = new HashSet<Group>();
+            this.Posts = new HashSet<Post>();
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
@@ -61,9 +80,11 @@ namespace Community3.Models
 
         [Required]
         [MaxLength(50), MinLength(1)]
+        [Display(Name = "Название")]
         public string Name { get; set; }
 
         [UIHint("MultilineText")]
+        [Display(Name = "Описание")]
         public string Description { get; set; }
 
         [ForeignKey("Image")]
@@ -78,15 +99,20 @@ namespace Community3.Models
         public virtual AppUser Owner { get; set; }
 
         public DateTime CreationDate { get; set; }
-        public virtual ICollection<AppUser> GroupUsers { get; set; }
+
+        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<AppUser> AppUsers { get; set; }
+        public virtual ICollection<AppUser> BlockUsers { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Audio> Audios { get; set; }
 
         public Group()
         {
-            this.GroupUsers = new HashSet<AppUser>();
+            this.AppUsers = new HashSet<AppUser>();
             this.Images = new HashSet<Image>();
             this.Audios = new HashSet<Audio>();
+            this.Posts = new HashSet<Post>();
+            this.BlockUsers = new HashSet<AppUser>();
         }
     }
 
@@ -97,8 +123,13 @@ namespace Community3.Models
         [Required]
         public string Path { get; set; }
         [Required]
-        [MaxLength(50), MinLength(1)]
         public string Name { get; set; }
+
+        public string Label { get; set; }
+
+        [ForeignKey("Post")]
+        public int? PostId { get; set; }
+        public virtual Post Post { get; set; }
 
         public virtual ICollection<AppUser> OwnersUsers { get; set; }
         public virtual ICollection<Group> OwnersGroups { get; set; }
@@ -112,20 +143,26 @@ namespace Community3.Models
 
     public class Image
     {
+        [Required]
         public int ImageId { get; set; }
         [Required]
         public string Path { get; set; }
         [Required]
         public string Name { get; set; }
 
-        public virtual ICollection<AppUser> OwnersUsers { get; set; }
-        public virtual ICollection<Group> OwnersGroups { get; set; }
+        public string Label { get; set; }
 
-        public Image()
-        {
-            this.OwnersUsers = new HashSet<AppUser>();
-            this.OwnersGroups = new HashSet<Group>();
-        }
+        [ForeignKey("AppUser")]
+        public string AppUserId { get; set; }
+        public virtual AppUser AppUser { get; set; }
+
+        [ForeignKey("Group")]
+        public int? GroupId { get; set; }
+        public virtual Group Group { get; set; }
+
+        [ForeignKey("Post")]
+        public int? PostId { get; set; }
+        public virtual Post Post { get; set; }
     }
 
     public class Message
@@ -137,12 +174,88 @@ namespace Community3.Models
         public AppUser Recipient { get; set; }
     }
 
+    public class Post
+    {
+        [Required]
+        public int PostId { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public DateTime CreationDate { get; set; }
+
+        [UIHint("MultilineText")]
+        public string Text { get; set; }
+
+        [ForeignKey("AppUser")]
+        public string AppUserId { get; set; }
+        public virtual AppUser AppUser { get; set; }
+
+        [ForeignKey("Group")]
+        public int? GroupId { get; set; }
+        public virtual Group Group { get; set; }
+
+        public virtual ICollection<Like> Likes { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<Audio> Audios { get; set; }
+        public virtual ICollection<AppUser> AppUsersLiked { get; set; }
+
+        public Post()
+        {
+            this.Images = new HashSet<Image>();
+            this.Audios = new HashSet<Audio>();
+            this.AppUsersLiked = new HashSet<AppUser>();
+            this.Likes = new HashSet<Like>();
+        }
+
+        public List<string> GetUsersLikedIdList()
+        {
+            var list = new List<string>();
+            foreach(var user in this.AppUsersLiked)
+            {
+                list.Add(user.Id);
+            }
+            return list;
+        }
+
+    }
+
+    public class Like
+    {
+        [Required]
+        public int LikeId { get; set; }
+
+        [ForeignKey("AppUser")]
+        public string AppUserId { get; set; }
+        public virtual AppUser AppUser { get; set; }
+
+        [ForeignKey("Post")]
+        public int? PostId { get; set; }
+        public virtual Post Post { get; set; }
+    }
+
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public DbSet<Group> Groups { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Audio> Audios { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Like> Likes { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Group>()
+                .HasMany<AppUser>(g => g.AppUsers)
+                .WithMany(u => u.Groups)
+                .Map(ua =>
+                {
+                    ua.MapLeftKey("GroupRefId");
+                    ua.MapRightKey("AppUserId");
+                    ua.ToTable("AppUsersGroups");
+                });
+        }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

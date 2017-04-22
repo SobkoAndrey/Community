@@ -57,6 +57,17 @@ namespace Community3.Models
 
     public class RegisterViewModel
     {
+
+        [Required]
+        [Display(Name = "Имя")]
+        [StringLength(15, ErrorMessage = "Значение {0} должно содержать не менее {2} символов.", MinimumLength = 2)]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Фамилия")]
+        [MaxLength(20, ErrorMessage = "{0} не может быть длинней 20 символов")]
+        public string Surname { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Адрес электронной почты")]

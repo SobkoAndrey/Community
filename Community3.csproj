@@ -174,79 +174,24 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201703070809546_InitialCreate.cs" />
-    <Compile Include="Migrations\201703070809546_InitialCreate.Designer.cs">
-      <DependentUpon>201703070809546_InitialCreate.cs</DependentUpon>
+    <Compile Include="Helpers\AudioHelper.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\PostHelper.cs" />
+    <Compile Include="Helpers\UserHelpers.cs" />
+    <Compile Include="Migrations\201703201454122_InitialCreate.cs" />
+    <Compile Include="Migrations\201703201454122_InitialCreate.Designer.cs">
+      <DependentUpon>201703201454122_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201703070925398_userUpdate.cs" />
-    <Compile Include="Migrations\201703070925398_userUpdate.Designer.cs">
-      <DependentUpon>201703070925398_userUpdate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703071048540_models.cs" />
-    <Compile Include="Migrations\201703071048540_models.Designer.cs">
-      <DependentUpon>201703071048540_models.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703071140352_userUpdate1.cs" />
-    <Compile Include="Migrations\201703071140352_userUpdate1.Designer.cs">
-      <DependentUpon>201703071140352_userUpdate1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703071238277_diff.cs" />
-    <Compile Include="Migrations\201703071238277_diff.Designer.cs">
-      <DependentUpon>201703071238277_diff.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703071408526_hz.cs" />
-    <Compile Include="Migrations\201703071408526_hz.Designer.cs">
-      <DependentUpon>201703071408526_hz.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703071421509_df.cs" />
-    <Compile Include="Migrations\201703071421509_df.Designer.cs">
-      <DependentUpon>201703071421509_df.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703080410551_photoImage.cs" />
-    <Compile Include="Migrations\201703080410551_photoImage.Designer.cs">
-      <DependentUpon>201703080410551_photoImage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703080431027_genderNull.cs" />
-    <Compile Include="Migrations\201703080431027_genderNull.Designer.cs">
-      <DependentUpon>201703080431027_genderNull.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703080846039_changeImage.cs" />
-    <Compile Include="Migrations\201703080846039_changeImage.Designer.cs">
-      <DependentUpon>201703080846039_changeImage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703100524594_description.cs" />
-    <Compile Include="Migrations\201703100524594_description.Designer.cs">
-      <DependentUpon>201703100524594_description.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703100539568_registerGender.cs" />
-    <Compile Include="Migrations\201703100539568_registerGender.Designer.cs">
-      <DependentUpon>201703100539568_registerGender.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703100555552_genderEmpty.cs" />
-    <Compile Include="Migrations\201703100555552_genderEmpty.Designer.cs">
-      <DependentUpon>201703100555552_genderEmpty.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703100840129_group.cs" />
-    <Compile Include="Migrations\201703100840129_group.Designer.cs">
-      <DependentUpon>201703100840129_group.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703111020017_photoId.cs" />
-    <Compile Include="Migrations\201703111020017_photoId.Designer.cs">
-      <DependentUpon>201703111020017_photoId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703111118119_groupImageId.cs" />
-    <Compile Include="Migrations\201703111118119_groupImageId.Designer.cs">
-      <DependentUpon>201703111118119_groupImageId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201703111126432_groupOwnerId.cs" />
-    <Compile Include="Migrations\201703111126432_groupOwnerId.Designer.cs">
-      <DependentUpon>201703111126432_groupOwnerId.cs</DependentUpon>
+    <Compile Include="Migrations\201703201501450_first.cs" />
+    <Compile Include="Migrations\201703201501450_first.Designer.cs">
+      <DependentUpon>201703201501450_first.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\GroupCreationModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -263,6 +208,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -312,6 +259,16 @@
     <Content Include="Views\Home\Groups.cshtml" />
     <Content Include="Views\Group\CreateGroup.cshtml" />
     <Content Include="Views\Shared\WrongFileExtensionError.cshtml" />
+    <Content Include="Views\Group\ManageGroup.cshtml" />
+    <Content Include="Views\Group\ShowAudio.cshtml" />
+    <Content Include="Views\Group\ShowImages.cshtml" />
+    <Content Include="Views\Group\ShowParticipants.cshtml" />
+    <Content Include="Views\Group\AddPost.cshtml" />
+    <Content Include="Views\Group\AddMultimediaToPost.cshtml" />
+    <Content Include="Views\Group\_Post.cshtml" />
+    <Content Include="Views\Group\_Images.cshtml" />
+    <Content Include="Views\Group\_Audios.cshtml" />
+    <Content Include="Views\Group\_Likes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -325,56 +282,11 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201703070809546_InitialCreate.resx">
-      <DependentUpon>201703070809546_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201703201454122_InitialCreate.resx">
+      <DependentUpon>201703201454122_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703070925398_userUpdate.resx">
-      <DependentUpon>201703070925398_userUpdate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703071048540_models.resx">
-      <DependentUpon>201703071048540_models.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703071140352_userUpdate1.resx">
-      <DependentUpon>201703071140352_userUpdate1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703071238277_diff.resx">
-      <DependentUpon>201703071238277_diff.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703071408526_hz.resx">
-      <DependentUpon>201703071408526_hz.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703071421509_df.resx">
-      <DependentUpon>201703071421509_df.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703080410551_photoImage.resx">
-      <DependentUpon>201703080410551_photoImage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703080431027_genderNull.resx">
-      <DependentUpon>201703080431027_genderNull.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703080846039_changeImage.resx">
-      <DependentUpon>201703080846039_changeImage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703100524594_description.resx">
-      <DependentUpon>201703100524594_description.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703100539568_registerGender.resx">
-      <DependentUpon>201703100539568_registerGender.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703100555552_genderEmpty.resx">
-      <DependentUpon>201703100555552_genderEmpty.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703100840129_group.resx">
-      <DependentUpon>201703100840129_group.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703111020017_photoId.resx">
-      <DependentUpon>201703111020017_photoId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703111118119_groupImageId.resx">
-      <DependentUpon>201703111118119_groupImageId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201703111126432_groupOwnerId.resx">
-      <DependentUpon>201703111126432_groupOwnerId.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201703201501450_first.resx">
+      <DependentUpon>201703201501450_first.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

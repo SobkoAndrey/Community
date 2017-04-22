@@ -12,10 +12,10 @@
 <body class="MainBack">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                @Html.ActionLink("Имя приложения", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            <div class="navbar-header" style="margin-left:5.5%">
+                @Html.ActionLink("Community", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse" style="margin-right:4%">
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
@@ -28,19 +28,19 @@
             <div class="col-md-3">
                 <div class="list-group">
                     <a href="/Users/MyDialogues" class="list-group-item">
-                        <span class="glyphicon glyphicon-envelope"></span> My dialogues <span class="badge"></span>
+                        <span class="glyphicon glyphicon-envelope"></span> Мои диалоги <span class="badge"></span>
                     </a>
                     <a href="/Users/MyPhotos" class="list-group-item">
-                        <span class="glyphicon glyphicon-camera"></span> My photos <span class="badge"></span>
+                        <span class="glyphicon glyphicon-camera"></span> Мои фотографии <span class="badge"></span>
                     </a>
                     <a href="/Home/Groups" class="list-group-item">
                         <span class="glyphicon glyphicon-link"></span> Мои группы <span class="badge"></span>
                     </a>
                     <a href="/Users/MyFriends" class="list-group-item">
-                        <span class="glyphicon glyphicon-user"></span> My friends <span class="badge"></span>
+                        <span class="glyphicon glyphicon-user"></span> Мои друзья <span class="badge"></span>
                     </a>
                     <a href="/Users/MyMusic" class="list-group-item">
-                        <span class="glyphicon glyphicon-music"></span> My music <span class="badge"></span>
+                        <span class="glyphicon glyphicon-music"></span> Моя музыка <span class="badge"></span>
                     </a>
                 </div>
                     @if (IsSectionDefined("Group"))
@@ -49,6 +49,14 @@
                             @RenderSection("Group")
                         </div>
                     }
+
+                    @if (IsSectionDefined("GroupRelation"))
+                    {
+                        <div>
+                            @RenderSection("GroupRelation")
+                        </div>
+                    }
+
                     @if (IsSectionDefined("CreateGroup"))
                     {
                         <div>

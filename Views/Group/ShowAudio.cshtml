@@ -1,0 +1,27 @@
+﻿@model Community3.Models.Group
+
+@{
+    ViewBag.Title = "ShowAudio";
+}
+
+<div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
+    <div class="container-fluid" style="padding-top: 2%">
+        <div class="row" style="margin-left: auto">
+            <div class="col-md-12" style="text-align:center">
+                <h3>Аудиозаписи группы @Model.Name</h3>
+                @foreach (var audio in Model.Audios)
+                {
+                    <div>@audio.Label</div>
+                    <audio controls>
+                        <source src="@Url.Content(audio.Path)" type="audio/mpeg">
+                    </audio>
+                    if(ViewBag.userId == Model.OwnerId)
+                    {
+                        @Html.ActionLink("Удалить", "RemoveAudio", "Group", new {groupId = Model.GroupId, audioId = audio.AudioId }, null);
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

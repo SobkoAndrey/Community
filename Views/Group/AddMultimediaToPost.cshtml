@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "AddMultimediaToPost";
+}
+
+
+
+<div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
+    <div class="container-fluid" style="padding-top: 2%">
+        <div class="row" style="margin-left: auto">
+            <div class="col-md-12">
+                <div>
+                    <div>Добавить фотографию</div>
+                    <input type="hidden" name="postId" id="postId" value="@ViewBag.postId" />
+                    <input type="file" name="upload" id="uploadImage" /><br />
+                    <button id="submitImage">Загрузить</button>
+                </div>
+                <br />
+                <div id="images"></div>
+                <div>
+                    <div>Добавить аудиозапись</div>
+                    <input type="hidden" name="postId" id="postId" value="@ViewBag.postId" />
+                    <input type="file" name="upload" id="uploadAudio" /><br />
+                    <button id="submitAudio">Загрузить</button>
+                </div>
+                <br />
+                <div id="audios"></div>
+                <form action="@Url.Action("CreatePost")" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="groupId" value="@ViewBag.groupId" />
+                    <input type="hidden" name="postId" value="@ViewBag.postId" />
+                    <input type="submit" value="Создать" lang="en-us" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+
+        $('#submitImage').on('click', function (e) {
+            e.preventDefault();
+            var id = document.getElementById('postId').value;
+            var files = document.getElementById('uploadImage').files;
+            if (files.length > 0) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+                    data.append('postId', id);
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("AddImageToPost", "Group", new { postId = ViewBag.postId})',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            var images = $('#images');
+                            images.append(result);
+                            alert(result);
+                        },
+                        error: function (xhr, status, p3) {
+                            alert(xhr.responsetext);
+                        }
+                    });
+                } else {
+                    alert("браузер не поддерживает загрузку файлов html5!");
+                }
+            }
+        });
+    </script>
+    <script type="text/javascript">
+
+        $('#submitAudio').on('click', function (e) {
+            e.preventDefault();
+            var id = document.getElementById('postId').value;
+            var files = document.getElementById('uploadAudio').files;
+            if (files.length > 0) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+                    data.append('postId', id);
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("AddAudioToPost", "Group", new { postId = ViewBag.postId})',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            var audios = $('#audios');
+                            audios.append(result);
+                            alert(result);
+                        },
+                        error: function (xhr, status, p3) {
+                            alert(xhr.responsetext);
+                        }
+                    });
+                } else {
+                    alert("браузер не поддерживает загрузку файлов html5!");
+                }
+            }
+        });
+    </script>
+}

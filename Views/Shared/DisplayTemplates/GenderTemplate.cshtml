@@ -6,6 +6,13 @@
 {
     if (gender == Model)
     {
-        @gender
+        if (gender == Gender.Male)
+        {
+            @:Мужской
+        }
+        else if (gender == Gender.Female)
+        {
+            @:Женский
+        }
     }
 }

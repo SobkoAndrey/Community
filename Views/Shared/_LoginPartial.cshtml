@@ -1,13 +1,18 @@
 ﻿@using Microsoft.AspNet.Identity
+@using Community3.Helpers
 @if (Request.IsAuthenticated)
-{
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-    @Html.AntiForgeryToken()
+            {
 
-    <ul class="nav navbar-nav navbar-right">
+                var helper = new UserHelpers();
+                var userId = User.Identity.GetUserId();
+
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Здравствуйте, " + User.Identity.GetUserName() + "!", "UserProfile", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @Html.ActionLink("Здравствуйте, " + helper.GetUserFullName(User.Identity.GetUserId()) + "!", "UserProfile", "Home", routeValues: new { id = userId}, htmlAttributes: new { title = "Manage" })
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
     </ul>

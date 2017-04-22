@@ -153,7 +153,7 @@ namespace Community3.Controllers
             if (ModelState.IsValid)
             {
 
-                var user = new AppUser { UserName = model.Email, Email = model.Email, Gender = Gender.Empty };
+                var user = new AppUser { Name = model.Name, UserName = model.Email, Email = model.Email, Gender = Gender.Empty, Surname = model.Surname };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

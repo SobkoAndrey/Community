@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Community3.Helpers;
 
 namespace Community3.Controllers
 {
@@ -42,44 +43,64 @@ namespace Community3.Controllers
             return View();
         }
 
-        public ActionResult UserProfile()
+        public ActionResult UserProfile(string id)
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            var userImageId = user.PhotoId;
-            var userPhoto = ApplicationDbContext.Images.Where(i => i.ImageId == userImageId).SingleOrDefault();
-            user.Photo = userPhoto;
+            var user = UserManager.FindById(id);
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            if (user != currentUser)
+            {
+                ViewBag.Access = "Denied";
+            }
             return View(user);
         }
 
-        public ActionResult ShowUserProfile(string id)
-        {
+        //public ActionResult ShowUserProfile(string id)
+        //{
 
-            ViewBag.Access = "Denied";
-            var user = ApplicationDbContext.Users.Where(u => u.Id == id).FirstOrDefault();
-            return View("UserProfile", user);
-        }
+        //    ViewBag.Access = "Denied";
+        //    var user = ApplicationDbContext.Users.Where(u => u.Id == id).FirstOrDefault();
+        //    return View("UserProfile", user);
+        //}
 
         public ActionResult EditProfile()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            return View(user);
+            var model = new UserProfileEditModel();
+            model.Gender = UserManager.FindById(User.Identity.GetUserId()).Gender;
+            return View(model);
         }
 
+        //[HttpPost]
+        //public ActionResult EditProfile(Gender? gender, DateTime? birthday, string location = "", string description = "")
+        //{
+        //    var user = UserManager.FindById(User.Identity.GetUserId());
+        //    using (ApplicationDbContext context = new ApplicationDbContext())
+        //    {
+        //        user.Gender = gender;
+        //        user.Location = location;
+        //        user.Birthday = birthday;
+        //        user.Description = description;
+        //        UserManager.Update(user);
+        //        context.SaveChanges();
+        //    }
+
+        //    return RedirectToAction("UserProfile", new { id = user.Id });
+        //}
+
         [HttpPost]
-        public ActionResult EditProfile(Gender? gender, DateTime? birthday, string location = "", string description = "")
+        public ActionResult EditProfile(UserProfileEditModel model)
         {
+            var user = UserManager.FindById(User.Identity.GetUserId());
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
-                var user = UserManager.FindById(User.Identity.GetUserId());
-                user.Gender = gender;
-                user.Location = location;
-                user.Birthday = birthday;
-                user.Description = description;
+                user.Gender = model.Gender;
+                user.Location = model.Location;
+                user.Birthday = model.Birthday;
+                user.Description = model.Description;
                 UserManager.Update(user);
                 context.SaveChanges();
             }
 
-            return RedirectToAction("UserProfile");
+            return RedirectToAction("UserProfile", new { id = user.Id });
         }
 
         public ActionResult ChangePhoto()
@@ -92,39 +113,40 @@ namespace Community3.Controllers
         [HttpPost]
         public async System.Threading.Tasks.Task<ActionResult> ChangePhoto(HttpPostedFileBase file)
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-
-            var fileName = Guid.NewGuid().ToString();
-            var extension = Path.GetExtension(file.FileName);
-            fileName += extension;
-
-            var extensions = new List<string>() { ".jpg", ".gif", ".png" };
-
-            if (extensions.Contains(extension))
-            {
-                file.SaveAs(Server.MapPath("~/Images/" + fileName));
-                using (ApplicationDbContext)
-                {
-                    Image photo = new Image();
-                    photo.Path = "~/Images/" + fileName;
-                    photo.Name = fileName;
-
-                    ApplicationDbContext.Images.Add(photo);
-                    ApplicationDbContext.SaveChanges();
-
-                    var image = ApplicationDbContext.Images.Where(i => i.Name == fileName).FirstOrDefault();
-                    user.PhotoId = image.ImageId;
-                    user.Photo = image;
-                    var result = await UserManager.UpdateAsync(user);
-                }
-                ViewBag.Message = "Фото загружено";
-            }
-            else
+            if (file == null)
             {
                 return View("WrongFileExtensionError");
             }
-            
-            return RedirectToAction("UserProfile");
+
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            var oldPhotoId = user.PhotoId;
+            var helper = new ImageHelper();
+            var image = helper.GetImageFromFile(file);
+
+            if (image != null)
+            {
+                using (ApplicationDbContext)
+                {
+                    user.PhotoId = image.ImageId;
+                    user.Photo = image;
+                    user.Images.Add(image);
+                    ApplicationDbContext.SaveChanges();
+                    var result = await UserManager.UpdateAsync(user);
+                    if (oldPhotoId != null)
+                    {
+                        var imageHelper = new ImageHelper();
+                        imageHelper.DeleteImageById(oldPhotoId.Value);
+                    }
+                }
+            } else
+
+
+            {
+                return View("WrongFileExtensionError");
+            }
+
+            return RedirectToAction("UserProfile", new { id = user.Id} );
+
         }
     }
 }

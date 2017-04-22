@@ -1,4 +1,4 @@
-﻿@model Community3.Models.AppUser
+﻿@model Community3.Models.UserProfileEditModel
 
 @{
     ViewBag.Title = "EditProfile";
@@ -12,24 +12,26 @@
                 <div class="col-md-12" style="text-align:center">
                     @using (Html.BeginForm("EditProfile", "Home"))
                     {
+                        @Html.ValidationSummary(false)
                         <div>
-                            <label>Gender</label><br />
-                            @Html.EditorFor(user => user.Gender, "GenderTemplate")
+                            <label>Пол</label><br />
+                            @Html.EditorFor(_ => _.Gender, "GenderTemplate")
                         </div>
                         <br />
                         <div>
-                            <label>Location</label><br />
-                            @Html.EditorFor(user => user.Location)
+                            <label>Город</label><br />
+                            @Html.EditorFor(_ => _.Location)
                         </div>
                         <br />
                         <div>
-                            <label>Birthday</label><br />
-                            @Html.EditorFor(user => user.Birthday)
+                            <label>День рождения в формате дд.мм.гггг</label><br />
+                            @Html.EditorFor(_ => _.Birthday)
+                            @Html.ValidationMessageFor(_=>_.Birthday)
                         </div>
                         <br />
                         <div>
-                            <label>Description</label><br />
-                            @Html.EditorFor(user => user.Description)
+                            <label>О вас</label><br />
+                            @Html.EditorFor(_ => _.Description)
                         </div>
                         <br />
                         <div>

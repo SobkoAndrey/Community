@@ -16,28 +16,20 @@
                     }
                     else
                     {
-                        <img src="~/Images/no-avatar.png" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                        <img src="@Url.Content("~/Images/no-avatar.png")" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                        @*<img src="~/Images/no-avatar.png" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />*@
                     }
                     <br />
                 </div>
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-12">
-                            <span style="font-size:large">@Model.UserName</span>
+                            <span style="font-size:large">@Model.FullName</span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            @{
-                                if (Model.Gender != Community3.Models.Gender.Empty)
-                                {
-                                    <span>Пол: @Model.Gender</span>
-                                }
-                                else
-                                {
-                                    <span>Пол: </span>
-                                }
-                            }
+                            <span>Пол: @Html.DisplayFor(u => u.Gender, "GenderTemplate")</span>
                         </div>
                     </div>
                     <div class="row">
@@ -54,7 +46,7 @@
                             }
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-12">
                             @{
@@ -72,16 +64,16 @@
                     <br />
                     @if (ViewBag.Access != "Denied")
                     {
-                    <div class="row">
-                        <div class="col-md-12">
-                            @Html.ActionLink("Change info", "EditProfile", "Home") <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.ActionLink("Редактировать профиль", "EditProfile", "Home") <br />
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            @Html.ActionLink("Change photo", "ChangePhoto", "Home") <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.ActionLink("Добавить/поменять фотографию", "ChangePhoto", "Home") <br />
+                            </div>
                         </div>
-                    </div>
                     }
                 </div>
             </div>
@@ -89,7 +81,7 @@
         <hr />
         <div class="row" style="margin-left: auto">
             <div class="col-md-12">
-                <h4>About user:</h4>
+                <h4>Обо мне:</h4>
                 <div>
                     @Model.Description
                 </div>
@@ -98,24 +90,24 @@
         <hr />
         <div class="row" style="margin-left: auto">
             <div class="col-md-12">
-                <h4>Groups:</h4>
-                @foreach(var group in Model.Groups)
+                <h4>Группы:</h4>
+                @foreach (var group in Model.Groups)
                 {
-                    @Html.ActionLink(group.Name, "ShowGroupPage", "Group") <br />
+                    @Html.ActionLink(group.Name, "ShowGroupPage", "Group", new { id = group.GroupId }, null) <br />
                 }
             </div>
         </div>
         <hr />
         <div class="row" style="margin-left: auto">
             <div class="col-md-12">
-                <h4>Friends:</h4>
+                <h4>Друзья:</h4>
                 @foreach (var user in Model.Friends)
                 {
-                    @Html.ActionLink(user.UserName, "ShowUserProfile", "Home", new { id = user.Id}, null) <br />
+                    @Html.ActionLink(user.FullName, "UserProfile", "Home", new { id = user.Id }, null) <br />
                 }
+                <br />
             </div>
         </div>
     </div>
 </body>
-
 

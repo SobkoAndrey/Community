@@ -15,4 +15,6 @@ namespace Community3.Models
         [UIHint("MultilineText")]
         public string Description { get; set; }
     }
+
+
 }
