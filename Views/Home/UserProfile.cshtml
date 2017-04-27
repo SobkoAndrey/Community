@@ -20,6 +20,10 @@
                         @*<img src="~/Images/no-avatar.png" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />*@
                     }
                     <br />
+                    @if (ViewBag.Access == "Denied")
+                    {
+                        @Html.ActionLink("Отправить сообщение", "ChatRoom", new { id = Model.Id }, new { @class = "btn btn-success" })
+                    }
                 </div>
                 <div class="col-md-8">
                     <div class="row">
@@ -110,4 +114,3 @@
         </div>
     </div>
 </body>
-

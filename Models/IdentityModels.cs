@@ -46,7 +46,7 @@ namespace Community3.Models
 
         [UIHint("MultilineText")]
         public string Description { get; set; }
-        
+
         [DataType(DataType.Date)]
         [RegularExpression(@"\d\d\.\d\d\.\d\d\d\d", ErrorMessage = "Некорректная дата")]
         public DateTime? Birthday { get; set; }
@@ -56,6 +56,7 @@ namespace Community3.Models
         public virtual ICollection<Audio> Audios { get; set; }
         public virtual ICollection<AppUser> Friends { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
+        public virtual ICollection<ChatRoom> ChatRooms { get; set; }
 
         public AppUser()
         {
@@ -64,6 +65,7 @@ namespace Community3.Models
             this.Friends = new HashSet<AppUser>();
             this.Groups = new HashSet<Group>();
             this.Posts = new HashSet<Post>();
+            this.ChatRooms = new HashSet<ChatRoom>();
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
@@ -165,13 +167,39 @@ namespace Community3.Models
         public virtual Post Post { get; set; }
     }
 
+    public class ChatRoom
+    {
+        [Required]
+        public int ChatRoomId { get; set; }
+
+        public virtual ICollection<AppUser> AppUsers { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
+
+        public ChatRoom()
+        {
+            this.AppUsers = new HashSet<AppUser>();
+            this.Messages = new HashSet<Message>();
+        }
+    }
+
     public class Message
     {
+        [Required]
         public int MessageId { get; set; }
-        public AppUser Sender { get; set; }
+
+        
+        [ForeignKey("Sender")]
+        public string SenderId { get; set; }
+        public virtual AppUser Sender { get; set; }
+
+        [Required]
         public string Text { get; set; }
+        [Required]
         public DateTime CreationTime { get; set; }
-        public AppUser Recipient { get; set; }
+
+        [ForeignKey("Recipient")]
+        public string RecipientId { get; set; }
+        public virtual AppUser Recipient { get; set; }
     }
 
     public class Post
@@ -211,7 +239,7 @@ namespace Community3.Models
         public List<string> GetUsersLikedIdList()
         {
             var list = new List<string>();
-            foreach(var user in this.AppUsersLiked)
+            foreach (var user in this.AppUsersLiked)
             {
                 list.Add(user.Id);
             }
@@ -242,6 +270,7 @@ namespace Community3.Models
         public DbSet<Image> Images { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<ChatRoom> ChatRooms { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

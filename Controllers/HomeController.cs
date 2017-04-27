@@ -36,11 +36,43 @@ namespace Community3.Controllers
             return View(user);
         }
 
-        public ActionResult Contact()
+        public ActionResult Dialogues()
         {
-            ViewBag.Message = "Your contact page.";
+            var recipients = new List<AppUser>();
+            //var messages = UserManager.FindById(User.Identity.GetUserId()).Messages;
+            //foreach (var message in messages)
+            //{
+            //    if (!recipients.Contains(message.Recipient))
+            //    {
+            //        recipients.Add(message.Recipient);
+            //    }
+            //}
+            return View(recipients);
+        }
 
-            return View();
+        public ActionResult ChatRoom(string id)
+        {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            var interlocutor = UserManager.FindById(id);
+            ViewBag.currentUser = currentUser;
+            ViewBag.interlocutor = interlocutor;
+            foreach (var chat in ApplicationDbContext.ChatRooms)
+            {
+                if (chat.AppUsers.Contains(currentUser) && chat.AppUsers.Contains(interlocutor))
+                {
+                    return View(chat);
+                }
+            }
+            var chatRoom = new ChatRoom();
+            using (ApplicationDbContext)
+            {
+                chatRoom.AppUsers.Add(currentUser);
+                chatRoom.AppUsers.Add(interlocutor);
+                ApplicationDbContext.ChatRooms.Add(chatRoom);
+                ApplicationDbContext.SaveChanges();
+            }
+
+            return View(chatRoom);
         }
 
         public ActionResult UserProfile(string id)
@@ -138,14 +170,15 @@ namespace Community3.Controllers
                         imageHelper.DeleteImageById(oldPhotoId.Value);
                     }
                 }
-            } else
+            }
+            else
 
 
             {
                 return View("WrongFileExtensionError");
             }
 
-            return RedirectToAction("UserProfile", new { id = user.Id} );
+            return RedirectToAction("UserProfile", new { id = user.Id });
 
         }
     }

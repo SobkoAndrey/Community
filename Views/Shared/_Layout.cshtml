@@ -27,7 +27,7 @@
             </div>
             <div class="col-md-3">
                 <div class="list-group">
-                    <a href="/Users/MyDialogues" class="list-group-item">
+                    <a href="/Home/Dialogues" class="list-group-item">
                         <span class="glyphicon glyphicon-envelope"></span> Мои диалоги <span class="badge"></span>
                     </a>
                     <a href="/Users/MyPhotos" class="list-group-item">
@@ -69,6 +69,9 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+    <script src="~/signalr/hubs"></script>
     @RenderSection("scripts", required: false)
+    
 </body>
 </html>
