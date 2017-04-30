@@ -1,60 +1,29 @@
 ﻿@model Community3.Models.ChatRoom
 
-<body>
-    <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
-        <div class="container-fluid" style="padding-top: 2%">
-            <div class="row" style="margin-left: auto">
-                <div class="col-md-12" style="text-align:center">
-                    <div class="main">
-                        @*<div id="loginBlock">
-                                Введите логин:<br />
-                                <input id="txtUserName" type="text" />
-                                <input id="btnLogin" type="button" value="Войти" />
-                            </div>*@
-                        <div>
-                            <h3>@ViewBag.interlocutor.FullName</h3>
-                        </div>
-                        <div id="chatBody">
-                            <div id="inputForm">
-                                <input type="hidden" id="chatId" value="@Model.ChatRoomId" />
-                                <input type="text" id="message" />
-                                <input type="button" id="sendmessage" value="Отправить" />
-                            </div>
-                            <div>
 
+<body>
+
+    <div class="MainWindow">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto; margin-right:auto">
+                <div class="col-md-12">
+                    <div style="font-size:large; font-weight:600">Диалог с @ViewBag.interlocutor.FullName</div>
+                    <br />
+                    <div class="main">
+                        <div id="chatBody">
+                            <div id="inputForm" class="input-group">
+                                <input type="hidden" id="chatId" value="@Model.ChatRoomId" />
+                                <input type="text" class="form-control" id="message" style="border-top-left-radius:4px; border-bottom-left-radius:4px" />
+                                <span class="input-group-btn" style="border-radius:4px">
+                                    <button type="button" class="btn btn-default" id="sendmessage">Отправить</button>
+                                </span>
                             </div>
                             <div id="chatroom">
-                                @foreach (var message in Model.Messages)
+                                <div id="start"></div>
+                                @foreach (var message in Model.Messages.Reverse())
                                 {
-                                    <div class="row">
-                                        <div class="col-md-2">
-                                            @if (message.Sender.Photo != null)
-                                            {
-                                                <img src="@Url.Content(message.Sender.Photo.Path)" alt="Фотография пользователя" title="@message.Sender.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
-                                            }
-                                            else
-                                            {
-                                                <img src="@Url.Content("~/Images/no-avatar.png")" alt="Фотография пользователя" title="@message.Sender.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
-                                            }
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div style="font-weight:600">
-                                                @message.Sender.FullName
-                                            </div>
-                                            <div>
-                                                @message.CreationTime.ToString("d MMM H:m")
-                                            </div>
-                                        </div>    
-                                    </div>
-                                    <div class="row">
-                                        @message.Text
-                                    </div>
-                                    <hr />
+                                    @Html.Partial("_Message", message);
                                 }
-                            </div>
-
-                            <div id="chatusers">
-                                <p><b>Все пользователи</b></p>
                             </div>
                         </div>
                         <input id="hdId" type="hidden" />
@@ -71,21 +40,44 @@
     <script type="text/javascript">
         $(function () {
 
-            $(document).mousemove(function () {
+            //$(document).mousemove(function () {
 
-                var name = $('#username').val();
-                chat.server.connect(name);
-            });
+            //    var name = $('#username').val();
+            //    chat.server.connect(name);
+            //});
 
             //$('#chatBody').hide();
             //$('#loginBlock').show();
             // Ссылка на автоматически-сгенерированный прокси хаба
             var chat = $.connection.chatHub;
             // Объявление функции, которая хаб вызывает при получении сообщений
-            chat.client.addMessage = function (name, message) {
+            chat.client.addMessage = function (id, message, chatId) {
                 // Добавление сообщений на веб-страницу
-                $('#chatroom').append('<p><b>' + htmlEncode(name)
-                    + '</b>: ' + htmlEncode(message) + '</p>');
+                //$('#chatroom').append('<p><b>' + htmlEncode(name)
+                //    + '</b>: ' + htmlEncode(message) + '</p>');
+
+                var data = new FormData();
+
+                data.append("userId", id);
+                data.append("message", message);
+                data.append("chatId", chatId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ShowNewMessage", "Home")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        //var chatroom = $('#chatroom');
+                        //chatroom.append(result);
+                        var start = $('#start');
+                        start.prepend(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
             };
 
             // Функция, вызываемая при подключении нового пользователя
@@ -150,15 +142,15 @@
             return encodedValue;
         }
         //Добавление нового пользователя
-        function AddUser(id, name) {
+        //function AddUser(id, name) {
 
-            var userId = $('#hdId').val();
+        //    var userId = $('#hdId').val();
 
-            if (userId != id) {
+        //    if (userId != id) {
 
-                $("#chatusers").append('<p id="' + id + '"><b>' + name + '</b></p>');
-            }
-        }
+        //        $("#chatusers").append('<p id="' + id + '"><b>' + name + '</b></p>');
+        //    }
+        //}
     </script>
 }
 

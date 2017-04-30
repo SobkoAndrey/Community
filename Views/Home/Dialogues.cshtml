@@ -1,17 +1,77 @@
-﻿@model IEnumerable<Community3.Models.AppUser>
+﻿@model Community3.Models.AppUser
 
 <body>
     <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
         <div class="container-fluid" style="padding-top: 2%">
-            <div class="row" style="margin-left: auto">
-                <div class="col-md-12" style="text-align:center">
-                    @foreach(var user in Model)
+            @if (Model.ChatRooms.Count == 0)
+            {
+                <h4 style="text-align:center">У вас нет открытых диалогов</h4><br />
+            }
+            @foreach (var chat in Model.ChatRooms)
+            {
+                foreach (var user in chat.AppUsers)
+                {
+                    if (user.Id != Model.Id)
                     {
-                        @: nbnnbm
-                        <button class="btn btn-default">Диалог с @user.FullName</button>
+                        <div id="@Url.Action("ChatRoom", "Home", new { id =  user.Id})">
+                            <div class="row" style="margin-left: auto">
+                                <div class="col-md-2">
+                                    <img src="@Url.Content(user.Photo != null ? user.Photo.Path : "~/Images/no-avatar.png")" alt="Фотография пользователя" title="@user.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="font-weight:600">
+                                        @user.FullName
+                                    </div>
+                                    <div>
+                                        @chat.Messages.Last().CreationTime.ToString("d MMM H:m")
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row" style="margin-left: auto; margin-right:auto">
+                                <div class="col-md-12">
+                                    @chat.Messages.Last().Text
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
                     }
-                </div>
-            </div>
+                }
+            }
         </div>
     </div>
 </body>
+
+@section scripts
+{
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('div[id]').hover(function () {
+            $(this).css('background-color', '#f5f5f5')
+        }
+        , function () {
+            $(this).css('background-color', '#ffffff')
+        });
+
+        $('div[id]').click(function () {
+            //var userId = $(this).attr('id');
+            window.location = $(this).attr('id');
+            @*var data = new FormData();
+            data.append('userId', userId);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GoChatRoom", "Home")',
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (result) {
+                },
+                error: function (xhr, status, p3) {
+                    alert(xhr.responsetext);
+                }
+            });*@
+        });
+    });
+</script>
+}

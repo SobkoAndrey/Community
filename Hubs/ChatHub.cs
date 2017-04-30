@@ -49,7 +49,8 @@ namespace Community3.Hubs
                 chat.Messages.Add(newMessage);
                 ApplicationDbContext.SaveChanges();
             }
-            Clients.All.addMessage(userName, message);
+
+            Clients.All.addMessage(id, message, chatId);
         }
 
 
@@ -61,18 +62,18 @@ namespace Community3.Hubs
         // Подключение нового пользователя
         public void Connect(string userName)
         {
-            var id = Context.ConnectionId;
+            //var id = Context.ConnectionId;
 
 
             //if (!Users.Any(_ => _.Id == id))
             //{
-                Users.Add(UserManager.FindById(id));
+                //Users.Add(UserManager.FindById(id));
 
                 // Посылаем сообщение текущему пользователю
-                Clients.Caller.onConnected(id, userName, Users);
+                //Clients.Caller.onConnected(id, userName, Users);
 
                 // Посылаем сообщение всем пользователям, кроме текущего
-                Clients.AllExcept(id).onNewUserConnected(id, userName);
+                //Clients.AllExcept(id).onNewUserConnected(id, userName);
             //}
         }
 

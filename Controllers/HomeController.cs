@@ -38,16 +38,8 @@ namespace Community3.Controllers
 
         public ActionResult Dialogues()
         {
-            var recipients = new List<AppUser>();
-            //var messages = UserManager.FindById(User.Identity.GetUserId()).Messages;
-            //foreach (var message in messages)
-            //{
-            //    if (!recipients.Contains(message.Recipient))
-            //    {
-            //        recipients.Add(message.Recipient);
-            //    }
-            //}
-            return View(recipients);
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            return View(currentUser);
         }
 
         public ActionResult ChatRoom(string id)
@@ -73,6 +65,29 @@ namespace Community3.Controllers
             }
 
             return View(chatRoom);
+        }
+
+        public ActionResult ShowNewMessage()
+        {
+            var userId = Request.Form.GetValues("userId")[0];
+            var message = Request.Form.GetValues("message")[0];
+            var chatId = Convert.ToInt32(Request.Form.GetValues("chatId")[0]);
+
+            var sender = UserManager.FindById(userId);
+            var chat = ApplicationDbContext.ChatRooms
+                .Where(_ => _.ChatRoomId == chatId).FirstOrDefault();
+
+            var recipient = chat.AppUsers.Where(_ => _.Id != userId).FirstOrDefault();
+
+            var newMessage = new Message();
+            newMessage.CreationTime = DateTime.Now;
+            newMessage.Text = message;
+            newMessage.Sender = sender;
+            newMessage.SenderId = sender.Id;
+            newMessage.Recipient = recipient;
+            newMessage.RecipientId = recipient.Id;
+
+            return PartialView("_Message", newMessage);
         }
 
         public ActionResult UserProfile(string id)
