@@ -1,0 +1,93 @@
+﻿@model Community3.Models.AppUser
+
+<body>
+    <div class="MainWindow">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto; margin-right:auto">
+                <div class="col-md-12" style="text-align:center">
+                    <h3>@Model.FullName</h3>
+                    @if (Model.Images.Count == 0)
+                    {
+                        <h4>Пользователь не загрузил ни одной фотографии.</h4>
+                    }
+                    @foreach (var image in Model.Images)
+                    {
+                        <img src="@Url.Content(image.Path)" title="@image.Label" style="max-width: 30%; height:auto; border-radius: 10%; padding-bottom:4px" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal_form">
+        <div id="image" style="text-align:center">
+        </div>
+    </div>
+    <div id="overlay"></div>
+
+
+</body>
+
+<style>
+    #modal_form {
+        width: 500px;
+        height: 500px;
+        border-radius: 5px;
+        border: 3px #000 solid;
+        background: #fff;
+        position: fixed;
+        top: 45%;
+        left: 50%;
+        margin-top: -250px;
+        margin-left: -250px;
+        display: none;
+        opacity: 0;
+        z-index: 5;
+        padding: 20px 10px;
+    }
+
+    #overlay {
+        z-index: 3;
+        position: fixed;
+        background-color: #000;
+        opacity: 0.8;
+        filter: alpha(opacity=80);
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+        display: none;
+    }
+</style>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('img').click(function (event) {
+                var img = $(this);
+                event.preventDefault();
+                $('#overlay').fadeIn(400,
+                    function () {
+                        $('#modal_form')
+                            .css('display', 'block')
+                            .animate({ opacity: 1, top: '50%' }, 200);
+
+                        $('div#image').empty();
+                        img.clone().appendTo($('div#image'));
+                        $('div#image :first-child').css('max-width', '470px').css('max-height', '470px');
+                    });
+            });
+
+            $('#overlay').click(function () {
+                $('#modal_form')
+                    .animate({ opacity: 0, top: '45%' }, 200,
+                        function () {
+                            $(this).css('display', 'none');
+                            $('#overlay').fadeOut(400);
+                        }
+                    );
+            });
+        });
+    </script>
+}

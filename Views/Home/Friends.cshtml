@@ -1,0 +1,163 @@
+﻿@using Community3.Models
+@model AppUser
+
+<body>
+    <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs">
+                        <li id="friends" role="presentation" class="active"><a href="#">Друзья</a></li>
+                        <li id="candidates" role="presentation">
+                            <a href="#">
+                                Заявки в друзья <span id="friendicon">
+                                    @if (Model.Candidates.Count > 0)
+                                    {
+                                        <img src="@Url.Content("~/Content/notification.png")" title="Новая заявка в друзья" />
+                                    }
+                                </span>
+                            </a>
+                        </li>
+                        <li id="search" role="presentation"><a href="#">Поиск</a></li>
+                    </ul>
+                    <div id="friends">
+                        @if (Model.Friends.Count == 0)
+                        {
+                            <h4>К сожалению у вас пока нет друзей</h4>
+                        }
+                        @foreach (var friend in Model.Friends)
+                        {
+                            <br />
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img src="@Url.Content(friend.Images.Count > 0 ? friend.Images.First().Path : "~/App_Data/no-avatar.png")" alt="Фотография пользователя" title="@friend.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
+                                </div>
+                                <div class="col-md-10">
+                                    <div style="font-weight:600">
+                                        @Html.ActionLink(friend.FullName, "UserProfile", "Home", new { id = friend.Id }, null)
+                                    </div>
+                                    <div>
+                                        @Html.ActionLink("Отправить сообщение", "ChatRoom", new { id = friend.Id }, new { @class = "btn btn-success" })
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        }
+                    </div>
+                    <div id="candidates" class="hidden">
+                        @if (Model.Candidates.Count == 0)
+                        {
+                            <h4>Нет новых заявок</h4>
+                        }
+                        @foreach (var candidate in Model.Candidates)
+                        {
+                            <br />
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img src="@Url.Content(candidate.Images.Count > 0 ? candidate.Images.First().Path : "~/App_Data/no-avatar.png")" alt="Фотография пользователя" title="@candidate.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
+                                </div>
+                                <div class="col-md-10">
+                                    <div style="font-weight:600">
+                                        @Html.ActionLink(candidate.FullName, "UserProfile", "Home", new { id = candidate.Id }, null)
+                                    </div>
+                                    <div>
+                                        @Html.ActionLink("Отправить сообщение", "ChatRoom", new { id = candidate.Id }, new { @class = "btn btn-success" })
+                                        <span>@Html.ActionLink("Добавить", "ConfirmFriendship", new { id = candidate.Id }, new { @class = "btn btn-success" })</span>
+                                        <span>@Html.ActionLink("Отклонить", "RefuseFriendship", new { id = candidate.Id }, new { @class = "btn btn-success" })</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+                        }
+                    </div>
+                    <div class="row" style="margin-right:auto">
+                        <div class="col-md-12">
+                            <div id="search" class="hidden">
+                                <br />
+                                <div id="inputForm" class="input-group">
+                                    <input type="text" class="form-control" id="name" style="border-top-left-radius:4px; border-bottom-left-radius:4px" />
+                                    <span class="input-group-btn" style="border-radius:4px">
+                                        <button type="button" class="btn btn-default" id="search">Поиск</button>
+                                    </span>
+                                </div>
+                                <br />
+                            </div>
+                            <div id="result">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var divFriends = $('div#friends');
+            var divCandidates = $('div#candidates');
+            var divSearch = $('div#search');
+            var divResult = $('div#result');
+            var liCandidates = $('li#candidates');
+            var liFriends = $('li#friends');
+            var liSearch = $('li#search');
+
+            liFriends.click(function () {
+                $(this).addClass('active');
+                liCandidates.removeClass('active');
+                liSearch.removeClass('active');
+                divFriends.removeClass('hidden');
+                divSearch.addClass('hidden');
+                divCandidates.addClass('hidden');
+                divResult.empty();
+
+            });
+
+            liCandidates.click(function () {
+                $(this).addClass('active');
+                liFriends.removeClass('active');
+                liSearch.removeClass('active');
+                divFriends.addClass('hidden');
+                divSearch.addClass('hidden');
+                divCandidates.removeClass('hidden');
+                $('#friendicon').addClass('hidden');
+                divResult.empty();
+            });
+
+            liSearch.click(function () {
+                $(this).addClass('active');
+                liFriends.removeClass('active');
+                liCandidates.removeClass('active');
+                divFriends.addClass('hidden');
+                divCandidates.addClass('hidden');
+                divSearch.removeClass('hidden');
+            });
+
+            $('button#search').click(function () {
+                var userName = $('#name').val();
+
+                var data = new FormData();
+                data.append('userName', userName);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UserSearchAjax", "Home")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        divResult.empty();
+                        divResult.append(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

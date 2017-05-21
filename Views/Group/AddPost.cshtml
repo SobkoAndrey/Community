@@ -9,7 +9,7 @@
         <div class="row" style="margin-left: auto">
             <div class="col-md-12" style="text-align:center">
                 @using (Html.BeginForm("AddPost", "Group"))
-            {
+                {
                     <input type="hidden" name="groupId" value="@ViewBag.groupId" />
                     <div>
                         @Html.LabelFor(p => p.Name) <br />

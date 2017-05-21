@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Community3.Models.Post>
+
+
+<body>
+    <div class="MainWindow">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto; margin-right:auto">
+                <div class="col-md-12">
+
+                    <div style="text-align:center">
+                        @Html.ActionLink("Добавить новость", "AddNews", new { }, new { @class = "btn btn-primary" })
+                    </div>
+                    <br />
+
+                    @foreach (var post in Model)
+                    {
+                        @Html.Partial("_Post", post);
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.btn-sm').click(function (e) {
+                e.preventDefault();
+                var postId = $(this).attr('id');
+                var like = $("#" + postId + " span:last");
+                var heart = $("#" + postId + " span:first");
+                var data = new FormData();
+                data.append('postId', postId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AddLike", "Group")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        like.empty();
+                        like.append(result);
+                        heart.removeClass('glyphicon glyphicon-heart-empty').addClass('glyphicon glyphicon-heart');
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('.btn-danger').click(function (e) {
+                e.preventDefault();
+                var postId = $(this).attr('id');
+                var postDiv = $('div').filter('#' + postId);
+                var data = new FormData();
+                data.append('postId', postId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("RemovePost", "Group")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        postDiv.hide(200);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

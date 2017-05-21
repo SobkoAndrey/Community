@@ -1,0 +1,104 @@
+﻿@model Community3.Models.AppUser
+
+<input class="hidden" id="@Model.Id" />
+<body>
+    <div class="MainWindow">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto; margin-right:auto">
+                <div class="col-md-7">
+                    <h4>Аудиозаписи</h4>
+                </div>
+                <div class="col-md-3">
+                    @if (Model.Audios.Count > 0)
+                    {
+                        <input type="text" placeholder="Новое название" id="newname" style="border-radius:4px" /><br />
+                        <br />
+                    }
+                </div>
+            </div>
+            @{var temp = 1; }
+            @foreach (var audio in Model.Audios)
+            {
+
+                <div id="@temp">
+                    <div class="row" style="margin-left: auto; margin-right:auto">
+                        <div class="col-md-7">
+                            <div>
+                                <label id="@audio.AudioId">@audio.Label</label>
+                            </div>
+                            <audio controls>
+                                <source src="@Url.Content(audio.Path)" type="audio/mpeg">
+                            </audio>
+                        </div>
+                        <div class="col-md-3">
+                            <div><button id="@audio.AudioId" data-path="@audio.Path" data-content="@audio.Name" class="btn btn-warning btn-xs">Переименовать</button></div><br />
+                            <div><button id="@audio.AudioId" data-wrap="@temp" class="btn btn-danger btn-xs">Удалить</button></div>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+
+                temp += 1;
+            }
+        </div>
+    </div>
+</body>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.btn-danger').click(function () {
+
+                var audioId = $(this).attr('id');
+                var temp = $(this).attr('data-wrap');
+                var audioDiv = $('div').filter('#' + temp);
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: 'http://localhost:50133/api/client/' + audioId,
+                    contentType: "application/json;charset=utf-8",
+                    success: function () {
+                        audioDiv.hide(200);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('.btn-warning').click(function () {
+
+                var audioId = $(this).attr('id');
+                var input = $('#newname');
+                var newLabel = input.val();
+                var userId = $('input.hidden').attr('id');
+                var name = $(this).attr('data-content');
+                var path = $(this).attr('data-path');
+                var label = $('label#' + audioId);
+
+                var audio = {
+                    AudioId: audioId,
+                    Name: name,
+                    Path: path,
+                    Label: newLabel
+                };
+
+                $.ajax({
+                    type: 'PUT',
+                    url: 'http://localhost:50133/api/client',
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(audio),
+                    success: function () {
+                        label.empty();
+                        label.append(newLabel);
+                        input.val('');
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+        });
+    </script>
+}

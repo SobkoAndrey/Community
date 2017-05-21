@@ -38,9 +38,9 @@ namespace Community3.Models
 
         public Gender Gender { get; set; }
 
-        [ForeignKey("Photo")]
-        public int? PhotoId { get; set; }
-        public virtual Image Photo { get; set; }
+        //[ForeignKey("Photo")]
+        //public int? PhotoId { get; set; }
+        //public virtual Image Photo { get; set; }
 
         public string Location { get; set; }
 
@@ -57,6 +57,7 @@ namespace Community3.Models
         public virtual ICollection<AppUser> Friends { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
         public virtual ICollection<ChatRoom> ChatRooms { get; set; }
+        public virtual ICollection<AppUser> Candidates { get; set; }
 
         public AppUser()
         {
@@ -66,6 +67,7 @@ namespace Community3.Models
             this.Groups = new HashSet<Group>();
             this.Posts = new HashSet<Post>();
             this.ChatRooms = new HashSet<ChatRoom>();
+            this.Candidates = new HashSet<AppUser>();
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<AppUser> manager)
@@ -89,10 +91,10 @@ namespace Community3.Models
         [Display(Name = "Описание")]
         public string Description { get; set; }
 
-        [ForeignKey("Image")]
-        public int? ImageId { get; set; }
+        //[ForeignKey("Image")]
+        //public int? ImageId { get; set; }
 
-        public virtual Image Image { get; set; }
+        //public virtual Image Image { get; set; }
 
         [Required]
         [ForeignKey("Owner")]
@@ -129,18 +131,23 @@ namespace Community3.Models
 
         public string Label { get; set; }
 
+        
+        public int? GroupId { get; set; }
+        [ForeignKey("GroupId")]
+        public virtual Group Group { get; set; }
+
         [ForeignKey("Post")]
         public int? PostId { get; set; }
         public virtual Post Post { get; set; }
 
-        public virtual ICollection<AppUser> OwnersUsers { get; set; }
-        public virtual ICollection<Group> OwnersGroups { get; set; }
+        //public virtual ICollection<AppUser> OwnersUsers { get; set; }
+        //public virtual ICollection<Group> OwnersGroups { get; set; }
 
-        public Audio()
-        {
-            this.OwnersUsers = new HashSet<AppUser>();
-            this.OwnersGroups = new HashSet<Group>();
-        }
+        //public Audio()
+        //{
+        //    this.OwnersUsers = new HashSet<AppUser>();
+        //    this.OwnersGroups = new HashSet<Group>();
+        //}
     }
 
     public class Image
@@ -154,17 +161,19 @@ namespace Community3.Models
 
         public string Label { get; set; }
 
-        [ForeignKey("AppUser")]
-        public string AppUserId { get; set; }
-        public virtual AppUser AppUser { get; set; }
+        //[ForeignKey("AppUser")]
+        //public string AppUserId { get; set; }
+        //public virtual AppUser AppUser { get; set; }
 
-        [ForeignKey("Group")]
+        //[ForeignKey("Group")]
         public int? GroupId { get; set; }
         public virtual Group Group { get; set; }
 
         [ForeignKey("Post")]
         public int? PostId { get; set; }
         public virtual Post Post { get; set; }
+
+        //public virtual ICollection<AppUser> AppUsers { get; set; }
     }
 
     public class ChatRoom
@@ -187,7 +196,7 @@ namespace Community3.Models
         [Required]
         public int MessageId { get; set; }
 
-        
+
         [ForeignKey("Sender")]
         public string SenderId { get; set; }
         public virtual AppUser Sender { get; set; }
@@ -207,7 +216,7 @@ namespace Community3.Models
         [Required]
         public int PostId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Поле должно быть установлено")]
         public string Name { get; set; }
         [Required]
         public DateTime CreationDate { get; set; }
@@ -276,14 +285,51 @@ namespace Community3.Models
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Group>()
-                .HasMany<AppUser>(g => g.AppUsers)
-                .WithMany(u => u.Groups)
-                .Map(ua =>
+                .HasMany<AppUser>(_ => _.AppUsers)
+                .WithMany(_ => _.Groups)
+                .Map(_ =>
                 {
-                    ua.MapLeftKey("GroupRefId");
-                    ua.MapRightKey("AppUserId");
-                    ua.ToTable("AppUsersGroups");
+                    _.MapLeftKey("GroupRefId");
+                    _.MapRightKey("AppUserId");
+                    _.ToTable("AppUsersGroups");
                 });
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(_ => _.Friends)
+                .WithMany();
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(_ => _.Candidates)
+                .WithMany()
+                .Map(_ =>
+                {
+                    _.MapLeftKey("AppUserRefId");
+                    _.MapRightKey("CandidateAppUserId");
+                    _.ToTable("AppUsersCandidates");
+                });
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(_ => _.Images)
+                .WithOptional()
+                .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(_ => _.Audios)
+                .WithOptional()
+                .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Group>()
+                .HasMany(_ => _.Images)
+                .WithOptional()
+                .HasForeignKey(_ => _.GroupId)
+                .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Like>()
+                .HasOptional(_ => _.AppUser)
+                .WithMany()
+                .WillCascadeOnDelete();
+
+                
         }
 
         public ApplicationDbContext()

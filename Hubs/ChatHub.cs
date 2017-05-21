@@ -26,7 +26,7 @@ namespace Community3.Hubs
             this.UserManager = new UserManager<AppUser>(new UserStore<AppUser>(this.ApplicationDbContext));
         }
 
-        static List<AppUser> Users = new List<AppUser>();
+        //static List<AppUser> Users = new List<AppUser>();
 
         public void Send(string id, string message, int chatId)
         {
@@ -60,8 +60,8 @@ namespace Community3.Hubs
         //}
 
         // Подключение нового пользователя
-        public void Connect(string userName)
-        {
+        //public void Connect(string userName)
+        //{
             //var id = Context.ConnectionId;
 
 
@@ -75,20 +75,20 @@ namespace Community3.Hubs
                 // Посылаем сообщение всем пользователям, кроме текущего
                 //Clients.AllExcept(id).onNewUserConnected(id, userName);
             //}
-        }
+        //}
 
         // Отключение пользователя
-        public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
-        {
-            var item = Users.FirstOrDefault(x => x.Id == Context.ConnectionId);
-            if (item != null)
-            {
-                Users.Remove(item);
-                var id = Context.ConnectionId;
-                Clients.All.onUserDisconnected(id, item.Name);
-            }
+        //public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
+        //{
+        //    var item = Users.FirstOrDefault(x => x.Id == Context.ConnectionId);
+        //    if (item != null)
+        //    {
+        //        Users.Remove(item);
+        //        var id = Context.ConnectionId;
+        //        Clients.All.onUserDisconnected(id, item.Name);
+        //    }
 
-            return base.OnDisconnected(stopCalled);
-        }
+        //    return base.OnDisconnected(stopCalled);
+        //}
     }
 }

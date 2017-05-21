@@ -1,0 +1,69 @@
+﻿@model Community3.Models.AppUser
+
+<body>
+
+    <div class="MainWindow">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-4">
+                    @if (Model.Images.Count > 0)
+                    {
+                        <img src="@Url.Content(Model.Images.First().Path)" alt="fgj" title="fgn" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("~/Content/no-avatar.png")" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                    }
+                    <br />
+                    @if (ViewBag.Access == "Denied")
+                    {
+                        <span>@Html.ActionLink("Фотографии", "ShowPhotos", new { id = Model.Id }, new { @class = "btn btn-primary btn-xs" })</span>
+                        <span>@Html.ActionLink("Музыка", "ShowMusic", new { id = Model.Id }, new { @class = "btn btn-primary btn-xs" })</span>
+                    }
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span style="font-size:large">@Model.FullName</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span>Пол: @Html.DisplayFor(u => u.Gender, "GenderTemplate")</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @{
+                                if (Model.Location != null)
+                                {
+                                    <span>Город: @Model.Location</span>
+                                }
+                                else
+                                {
+                                    <span>Город: </span>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            @{
+                                if (Model.Birthday != null)
+                                {
+                                    <span>День рождения: @Model.Birthday.Value.ToShortDateString()</span>
+                                }
+                                else
+                                {
+                                    <span>День рождения: </span>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

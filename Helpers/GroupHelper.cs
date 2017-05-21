@@ -9,54 +9,59 @@ using System.Web;
 
 namespace Community3.Helpers
 {
-    public class PostHelper
+    public class GroupHelper
     {
         protected ApplicationDbContext ApplicationDbContext { get; set; }
         protected UserManager<AppUser> UserManager { get; set; }
 
-        public PostHelper()
+        public GroupHelper()
         {
             this.ApplicationDbContext = new ApplicationDbContext();
             this.UserManager = new UserManager<AppUser>(new UserStore<AppUser>(this.ApplicationDbContext));
         }
 
-        public void DeletePostById(int id)
+        public void DeleteGroupById(int id)
         {
+
             var audios = new List<Audio>();
             var images = new List<Image>();
+            var posts = new List<Post>();
+
+            var audioHelper = new AudioHelper();
+            var imageHelper = new ImageHelper();
+            var postHelper = new PostHelper();
 
             using (var context = new ApplicationDbContext())
             {
-                var post = context.Posts.Where(_ => _.PostId == id).FirstOrDefault();
-                var likes = post.Likes.ToList();
-                images = post.Images.ToList();
-                audios = post.Audios.ToList();
+                var group = context.Groups.Where(_ => _.GroupId == id).FirstOrDefault();
 
-                foreach (var like in likes)
-                {
-                    context.Likes.Remove(like);
-                    context.SaveChanges();
-                }
-                
-                post.Audios.Clear();
-                post.Images.Clear();
-                post.Likes.Clear();
-                post.AppUsersLiked.Clear();
+                audios = group.Audios.ToList();
+                images = group.Images.ToList();
+                posts = group.Posts.ToList();
 
-                context.Posts.Remove(post);
+                group.Images.Clear();
+                group.Audios.Clear();
+                group.Posts.Clear();
+                group.AppUsers.Clear();
+                group.BlockUsers.Clear();
+
+                context.Groups.Remove(group);
                 context.SaveChanges();
             }
 
             foreach (var audio in audios)
             {
-                var audioHelper = new AudioHelper();
                 audioHelper.DeleteAudioById(audio.AudioId);
             }
             foreach (var image in images)
             {
-                var imageHelper = new ImageHelper();
                 imageHelper.DeleteImageById(image.ImageId);
             }
+            foreach (var post in posts)
+            {
+                postHelper.DeletePostById(post.PostId);
+            }
+
         }
     }
 }

@@ -21,14 +21,15 @@ namespace Community3.Helpers
             this.ApplicationDbContext = new ApplicationDbContext();
             this.UserManager = new UserManager<AppUser>(new UserStore<AppUser>(this.ApplicationDbContext));
         }
-    
+
         public string GetUserFullName(string userId)
         {
             var user = UserManager.FindById(userId);
             if (user != null)
             {
                 return user.Name + " " + user.Surname;
-            } else
+            }
+            else
             {
                 return "";
             }

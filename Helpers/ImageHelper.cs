@@ -51,13 +51,13 @@ namespace Community3.Helpers
 
         public void DeleteImageById(int id)
         {
-            using (ApplicationDbContext)
+            using (var context = new ApplicationDbContext())
             {
-                var image = ApplicationDbContext.Images.Where(a => a.ImageId == id).FirstOrDefault();
+                var image = context.Images.Where(a => a.ImageId == id).FirstOrDefault();
                 var path = System.Web.HttpContext.Current.Server.MapPath(image.Path);
                 System.IO.File.Delete(path);
-                ApplicationDbContext.Images.Remove(image);
-                ApplicationDbContext.SaveChanges();
+                context.Images.Remove(image);
+                context.SaveChanges();
             }
         }
     }

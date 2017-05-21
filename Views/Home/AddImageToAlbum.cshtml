@@ -1,0 +1,14 @@
+﻿<body>
+    <div class="MainWindow">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto; margin-right:auto">
+                <div class="col-md-12">
+                    <form action="@Url.Action("AddImageToAlbum", "Home")" method="post" enctype="multipart/form-data">
+                        <input type="file" name="file" lang="en-us" />
+                        <input type="submit" name="submit" value="Добавить в альбом" class="btn btn-primary" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

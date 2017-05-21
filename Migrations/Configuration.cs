@@ -1,5 +1,8 @@
 namespace Community3.Migrations
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -15,18 +18,32 @@ namespace Community3.Migrations
 
         protected override void Seed(Community3.Models.ApplicationDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            var userManager = new ApplicationUserManager(new UserStore<AppUser>(context));
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+
+            var user = new IdentityRole { Name = "user" };
+            var admin = new IdentityRole { Name = "admin" };
+            var moder = new IdentityRole { Name = "moder" };
+            var inBlock = new IdentityRole { Name = "blocked" };
+            
+            roleManager.Create(user);
+            roleManager.Create(admin);
+            roleManager.Create(moder);
+            roleManager.Create(inBlock);
+
+            var mainAdmin = new AppUser { Name = "admin", UserName = "admin@admin.ru", Email = "admin@admin.ru", Gender = Gender.Empty, Surname = "admin" };
+            string password = "111111";
+            var result = userManager.Create(mainAdmin, password);
+
+            if (result.Succeeded)
+            {
+                userManager.AddToRole(mainAdmin.Id, admin.Name);
+                userManager.AddToRole(mainAdmin.Id, moder.Name);
+                userManager.AddToRole(mainAdmin.Id, user.Name);
+            }
+
+            base.Seed(context);
         }
     }
 }

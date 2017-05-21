@@ -8,21 +8,40 @@
 
     <div class="MainWindow">
         <div class="container-fluid" style="padding-top: 2%">
-            <div class="row" style="margin-left: auto">
+            <div class="row" style="margin-left: auto; margin-right:auto">
                 <div class="col-md-4">
-                    @if (Model.Photo != null)
+                    @if (Model.Images.Count != 0)
                     {
-                        <img src="@Url.Content(Model.Photo.Path)" alt="fgj" title="fgn" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+                        <img src="@Url.Content(Model.Images.First().Path)" alt="fgj" title="fgn" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
                     }
                     else
                     {
-                        <img src="@Url.Content("~/Images/no-avatar.png")" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
-                        @*<img src="~/Images/no-avatar.png" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />*@
+                        <img src="@Url.Content("~/Content/no-avatar.png")" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
                     }
                     <br />
                     @if (ViewBag.Access == "Denied")
                     {
-                        @Html.ActionLink("Отправить сообщение", "ChatRoom", new { id = Model.Id }, new { @class = "btn btn-success" })
+                        <span>@Html.ActionLink("Фотографии", "ShowPhotos", new { id = Model.Id }, new { @class = "btn btn-primary btn-xs" })</span>
+                        <span>@Html.ActionLink("Музыка", "ShowMusic", new { id = Model.Id }, new { @class = "btn btn-primary btn-xs" })</span>
+                    }
+                    @if (User.IsInRole("moder") && ViewBag.currentUser != Model)
+                    {
+                        <br />
+                        <br />
+                        if (ViewBag.blocked == "blocked")
+                        {
+                        <div>@Html.ActionLink("Разблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
+                        }
+                        else
+                        {
+                        <div>@Html.ActionLink("Заблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
+                        }
+                    }
+
+                    @if (User.IsInRole("admin") && ViewBag.currentUser != Model)
+                    {
+                        <br />
+                        <div>@Html.ActionLink("Удалить пользователя", "RemoveUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>   
                     }
                 </div>
                 <div class="col-md-8">
@@ -66,7 +85,32 @@
                         </div>
                     </div>
                     <br />
-                    @if (ViewBag.Access != "Denied")
+                    @if (ViewBag.Access == "Denied")
+                    {
+                        @Html.ActionLink("Отправить сообщение", "ChatRoom", new { id = Model.Id }, new { @class = "btn btn-success" })
+                        <br />
+                        <br />
+                        if (Model.Candidates.Contains(ViewBag.currentUser))
+                        {
+                            <button class="btn btn-success">Запрос на дружбу отправлен</button>
+
+                        }
+                        else if (ViewBag.currentUser.Friends.Contains(Model))
+                        {
+                            <button id="removefriend" class="btn btn-success" value="@Model.Id">Удалить из друзей</button>
+
+                        }
+                        else if (ViewBag.currentUser.Candidates.Contains(Model))
+                        {
+                            <button id="confirmfriend" class="btn btn-success" value="@Model.Id">Добавить в друзья</button>
+                        }
+                        else
+                        {
+                            <button id="offerfriend" class="btn btn-success" value="@Model.Id">Предложить дружбу</button>
+                        }
+                    }
+                    else
+
                     {
                         <div class="row">
                             <div class="col-md-12">
@@ -102,7 +146,7 @@
             </div>
         </div>
         <hr />
-        <div class="row" style="margin-left: auto">
+        <div class="row" style="margin-left: auto; margin-right:auto">
             <div class="col-md-12">
                 <h4>Друзья:</h4>
                 @foreach (var user in Model.Friends)
@@ -111,6 +155,142 @@
                 }
                 <br />
             </div>
+            <div class="col-md-12" style="text-align:center">
+                <h4>Новости:</h4>
+                @foreach (var post in Model.Posts)
+                {
+                    @Html.Partial("_Post", post);
+                }
+                <br />
+            </div>
         </div>
     </div>
 </body>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#offerfriend').click(function () {
+
+                var userId = $('#offerfriend').val();
+                var data = new FormData();
+
+                data.append("userId", userId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("OfferFriendship", "Home")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function () {
+                        var friend = $('#offerfriend');
+                        friend.empty();
+                        friend.append("Запрос на дружбу отправлен");
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('#removefriend').click(function () {
+
+                var userId = $('#removefriend').val();
+                var data = new FormData();
+
+                data.append("userId", userId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("FinishFriendship", "Home")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function () {
+                        var friend = $('#removefriend');
+                        friend.empty();
+                        friend.append("Удален из друзей");
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('#confirmfriend').click(function () {
+
+                var userId = $('#confirmfriend').val();
+                var data = new FormData();
+
+                data.append("userId", userId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ConfirmFriendshipAjax", "Home")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function () {
+                        var friend = $('#confirmfriend');
+                        friend.empty();
+                        friend.append("Добавлен в друзья");
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('.btn-sm').click(function (e) {
+                e.preventDefault();
+                var postId = $(this).attr('id');
+                var like = $("#" + postId + " span:last");
+                var heart = $("#" + postId + " span:first");
+                var data = new FormData();
+                data.append('postId', postId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AddLike", "Group")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        like.empty();
+                        like.append(result);
+                        heart.removeClass('glyphicon glyphicon-heart-empty').addClass('glyphicon glyphicon-heart');
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $(document).ready(function () {
+                $('button[value]').click(function (e) {
+                    e.preventDefault();
+                    var postId = $(this).attr('id');
+                    var postDiv = $('div').filter('#' + postId);
+                    var data = new FormData();
+                    data.append('postId', postId);
+
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("RemovePost", "Group")',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            postDiv.hide(200);
+                        },
+                        error: function (xhr, status, p3) {
+                            alert(xhr.responsetext);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}

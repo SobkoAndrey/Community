@@ -1,0 +1,40 @@
+﻿@using Community3.Helpers
+@model IEnumerable<Community3.Models.AppUser>
+
+@if (Model != null)
+{
+    <table class="table table-striped table-hover ">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Имя</th>
+                <th>Почта</th>
+                <th>Роли</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@Html.ActionLink(user.FullName, "UserProfile", "Home", new { id = user.Id }, new { })</td>
+                    <td>@user.Email</td>
+                    <td>
+                        @foreach (var role in user.Roles)
+                        {
+                            <div>@role.GetName()</div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>@Html.ActionLink("Дать / забрать права администратора", "AddUserAdminRole", "Admin", new { id = user.Id }, new { @class = "btn btn-primary btn-xs" })</td>
+                </tr>
+                <tr>
+                    <td>@Html.ActionLink("Дать / забрать права модератора", "AddUserModerRole", "Admin", new { id = user.Id }, new { @class = "btn btn-info btn-xs" })</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+

@@ -3,7 +3,7 @@
 <br />
 <div class="row">
     <div class="col-md-2">
-        <img src="@Url.Content(Model.Sender.Photo != null ? Model.Sender.Photo.Path : "~/Images/no-avatar.png")" alt="Фотография пользователя" title="@Model.Sender.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
+        <img src="@Url.Content(Model.Sender.Images.Count > 0 ? Model.Sender.Images.First().Path : "~/Content/no-avatar.png")" alt="Фотография пользователя" title="@Model.Sender.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
     </div>
     <div class="col-md-10">
         <div style="font-weight:600">

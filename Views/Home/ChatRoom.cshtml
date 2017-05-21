@@ -2,7 +2,6 @@
 
 
 <body>
-
     <div class="MainWindow">
         <div class="container-fluid" style="padding-top: 2%">
             <div class="row" style="margin-left: auto; margin-right:auto">
@@ -40,21 +39,9 @@
     <script type="text/javascript">
         $(function () {
 
-            //$(document).mousemove(function () {
-
-            //    var name = $('#username').val();
-            //    chat.server.connect(name);
-            //});
-
-            //$('#chatBody').hide();
-            //$('#loginBlock').show();
-            // Ссылка на автоматически-сгенерированный прокси хаба
             var chat = $.connection.chatHub;
-            // Объявление функции, которая хаб вызывает при получении сообщений
+
             chat.client.addMessage = function (id, message, chatId) {
-                // Добавление сообщений на веб-страницу
-                //$('#chatroom').append('<p><b>' + htmlEncode(name)
-                //    + '</b>: ' + htmlEncode(message) + '</p>');
 
                 var data = new FormData();
 
@@ -69,8 +56,6 @@
                     processData: false,
                     data: data,
                     success: function (result) {
-                        //var chatroom = $('#chatroom');
-                        //chatroom.append(result);
                         var start = $('#start');
                         start.prepend(result);
                     },
@@ -80,77 +65,15 @@
                 });
             };
 
-            // Функция, вызываемая при подключении нового пользователя
-            chat.client.onConnected = function (id, userName, allUsers) {
-
-                //$('#loginBlock').hide();
-                //$('#chatBody').show();
-                // установка в скрытых полях имени и id текущего пользователя
-                $('#hdId').val(id);
-                $('#username').val(userName);
-
-                // Добавление всех пользователей
-                for (i = 0; i < allUsers.length; i++) {
-
-                    AddUser(allUsers[i].ConnectionId, allUsers[i].Name);
-                }
-            }
-
-            // Добавляем нового пользователя
-            chat.client.onNewUserConnected = function (id, name) {
-
-                AddUser(id, name);
-            }
-
-            // Удаляем пользователя
-            chat.client.onUserDisconnected = function (id, userName) {
-
-                $('#' + id).remove();
-            }
-
-            // Открываем соединение
             $.connection.hub.start().done(function () {
 
                 $('#sendmessage').click(function () {
-                    // Вызываем у хаба метод Send
-                    chat.server.send('@ViewBag.currentUser.Id', $('#message').val(), $('#chatId').val());
+                    var message = $('#message').val();
+                    chat.server.send('@ViewBag.currentUser.Id', message, $('#chatId').val());
                     $('#message').val('');
                 });
-
-                //$('#sendmessage').click(function () {
-                //    // Вызываем у хаба метод Send
-                //    chat.server.send($('#username').val(), $('#message').val());
-                //    $('#message').val('');
-                //});
-
-                // обработка логина
-                //$("#btnLogin").click(function () {
-
-                //    var name = $("#txtUserName").val();
-                //    if (name.length > 0) {
-                //        chat.server.connect(name);
-                //    }
-                //    else {
-                //        alert("Введите имя");
-                //    }
-                //});
             });
         });
-        // Кодирование тегов
-        function htmlEncode(value) {
-            var encodedValue = $('<div />').text(value).html();
-            return encodedValue;
-        }
-        //Добавление нового пользователя
-        //function AddUser(id, name) {
-
-        //    var userId = $('#hdId').val();
-
-        //    if (userId != id) {
-
-        //        $("#chatusers").append('<p id="' + id + '"><b>' + name + '</b></p>');
-        //    }
-        //}
     </script>
 }
 

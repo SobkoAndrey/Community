@@ -16,21 +16,27 @@
                         <div id="@Url.Action("ChatRoom", "Home", new { id =  user.Id})">
                             <div class="row" style="margin-left: auto">
                                 <div class="col-md-2">
-                                    <img src="@Url.Content(user.Photo != null ? user.Photo.Path : "~/Images/no-avatar.png")" alt="Фотография пользователя" title="@user.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
+                                    <img src="@Url.Content(user.Images.Count > 0 ? user.Images.First().Path : "~/Content/no-avatar.png")" alt="Фотография пользователя" title="@user.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
                                 </div>
                                 <div class="col-md-6">
                                     <div style="font-weight:600">
                                         @user.FullName
                                     </div>
                                     <div>
-                                        @chat.Messages.Last().CreationTime.ToString("d MMM H:m")
+                                        @if (chat.Messages.Count != 0)
+                                        {
+                                            @chat.Messages.Last().CreationTime.ToString("d MMM H:m")
+                                        }
                                     </div>
                                 </div>
                             </div>
                             <br />
                             <div class="row" style="margin-left: auto; margin-right:auto">
                                 <div class="col-md-12">
-                                    @chat.Messages.Last().Text
+                                    @if (chat.Messages.Count != 0)
+                                    {
+                                        @chat.Messages.Last().Text
+                                    }
                                 </div>
                             </div>
                             <hr />
@@ -44,34 +50,18 @@
 
 @section scripts
 {
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('div[id]').hover(function () {
-            $(this).css('background-color', '#f5f5f5')
-        }
-        , function () {
-            $(this).css('background-color', '#ffffff')
-        });
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('div[id]').hover(function () {
+                $(this).css('background-color', '#f5f5f5')
+            }
+            , function () {
+                $(this).css('background-color', '#ffffff')
+            });
 
-        $('div[id]').click(function () {
-            //var userId = $(this).attr('id');
-            window.location = $(this).attr('id');
-            @*var data = new FormData();
-            data.append('userId', userId);
-
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("GoChatRoom", "Home")',
-                contentType: false,
-                processData: false,
-                data: data,
-                success: function (result) {
-                },
-                error: function (xhr, status, p3) {
-                    alert(xhr.responsetext);
-                }
-            });*@
+            $('div[id]').click(function () {
+                window.location = $(this).attr('id');
+            });
         });
-    });
-</script>
+    </script>
 }

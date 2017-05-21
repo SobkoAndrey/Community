@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Community3.Models.Group>
+
+@if (Model != null)
+{
+    <table class="table table-striped table-hover ">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Название</th>
+                <th>Основатель</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in Model)
+            {
+                <tr>
+                    <td>@group.GroupId</td>
+                    <td>@Html.ActionLink(group.Name, "ShowGroupPage", "Group", new { id = group.GroupId }, new { })</td>
+                    <td>@Html.ActionLink(group.Owner.FullName, "UserProfile", "Home", new { id = group.Owner.Id }, new { })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

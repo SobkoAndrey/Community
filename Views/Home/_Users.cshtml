@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Community3.Models.AppUser>
+
+@foreach (var user in Model)
+{
+        <div>
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-2">
+                    <img src="@Url.Content(user.Images.Count > 0 ? user.Images.First().Path : "~/Content/no-avatar.png")" alt="Фотография пользователя" title="@user.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
+                </div>
+                <div class="col-md-6">
+                    <div style="font-weight:600">
+                        @Html.ActionLink(user.FullName, "UserProfile", "Home", new { id = user.Id }, null)
+                    </div>
+                </div>
+            </div>
+            <br />
+            <hr />
+        </div>  
+}

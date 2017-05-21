@@ -45,13 +45,13 @@ namespace Community3.Helpers
 
         public void DeleteAudioById(int id)
         {
-            var audio = ApplicationDbContext.Audios.Where(a => a.AudioId == id).FirstOrDefault();
-            var path = System.Web.HttpContext.Current.Server.MapPath(audio.Path);
-            System.IO.File.Delete(path);
-            using (ApplicationDbContext)
+            using (var context = new ApplicationDbContext())
             {
-                ApplicationDbContext.Audios.Remove(audio);
-                ApplicationDbContext.SaveChanges();
+                var audio = context.Audios.Where(a => a.AudioId == id).FirstOrDefault();
+                var path = System.Web.HttpContext.Current.Server.MapPath(audio.Path);
+                System.IO.File.Delete(path);
+                context.Audios.Remove(audio);
+                context.SaveChanges();
             }
         }
     }

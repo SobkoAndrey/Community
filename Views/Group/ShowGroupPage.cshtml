@@ -5,7 +5,7 @@
     ViewBag.Title = "ShowGroupPage";
     var audios = Model.Audios.ToArray();
     var images = Model.Images.ToArray();
-    var postList = Model.Posts.ToList().OrderBy(_=>_.CreationDate).Reverse();
+    var postList = Model.Posts.ToList().OrderBy(_ => _.CreationDate).Reverse();
     var usersIds = new List<string>();
     foreach (var user in Model.AppUsers)
     {
@@ -50,7 +50,7 @@
                     <h5>Группа создана @Model.CreationDate.ToShortDateString()</h5>
                 </div>
             </div>
-            @if (usersIds.Contains(ViewBag.userId) || (Model.OwnerId == ViewBag.userId))
+            @if (usersIds.Contains(ViewBag.userId) || (Model.OwnerId == ViewBag.userId) || User.IsInRole("admin"))
             {
                 <div class="row" style="margin-left: auto">
                     <div class="col-md-12" style="text-align:center">
@@ -136,7 +136,7 @@
                             </div>
                             <br />
                         }
-                        @foreach(var post in postList)
+                        @foreach (var post in postList)
                         {
                             @Html.Partial("_Post", post);
                         }
@@ -157,11 +157,11 @@
     </div>
 </body>
 
-@section Group 
+@section Group
     {
-    @if (Model.Image != null)
+    @if (Model.Images.Count > 0)
     {
-        <img src="@Url.Content(Model.Image.Path)" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+        <img src="@Url.Content(Model.Images.First().Path)" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
         <br />
         <div class="MainWindow" style="text-align:center">
             <div style="font-size:large">@Model.Name</div>
@@ -169,40 +169,47 @@
     }
     else
     {
-        <img src="~/Images/no-image.jpg" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
+        <img src="~/Content/no-image.jpg" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
         <br />
         <div class="MainWindow" style="text-align:center">
             <div style="font-size:large">@Model.Name</div>
         </div>
     }
+    @if (User.IsInRole("admin"))
+    {
+        <br />
+        <div style="text-align:center">
+            <span>@Html.ActionLink("Удалить группу", "RemoveGroup", "Group", new { id = Model.GroupId }, new { @class = "btn btn-warning" })</span>
+        </div>
+    }
 }
 
-@section GroupRelation 
+@section GroupRelation
     {
     @if (Model.OwnerId != ViewBag.userId)
     {
         if (usersIds.Contains(ViewBag.userId))
         {
             <br />
-            <div style="text-align:center">
-                <a href="/Group/Unsubscribe/@Model.GroupId" class="btn btn-primary" role="button">Отписаться</a>
-            </div>
+                        <div style="text-align:center">
+                            <a href="/Group/Unsubscribe/@Model.GroupId" class="btn btn-primary" role="button">Отписаться</a>
+                        </div>
         }
         else
         {
             if (blockUsersIds.Contains(ViewBag.userId))
             {
                 <br />
-                <div class="MainWindow" style="text-align:center">
-                    <span style="font-weight:600">Вы заблокированы администратором группы</span>
-                </div>
+                            <div class="MainWindow" style="text-align:center">
+                                <span style="font-weight:600">Вы заблокированы администратором группы</span>
+                            </div>
             }
             else
             {
                 <br />
-                <div style="text-align:center">
-                    <a href="/Group/Subscribe/@Model.GroupId" class="btn btn-primary" role="button">Подписаться</a>
-                </div>
+                            <div style="text-align:center">
+                                <a href="/Group/Subscribe/@Model.GroupId" class="btn btn-primary" role="button">Подписаться</a>
+                            </div>
             }
         }
     }
@@ -210,57 +217,57 @@
 
 
 @section scripts{
-        <script type="text/javascript">
+    <script type="text/javascript">
 
-            $(document).ready(function () {
-                $('.btn-sm').click(function (e) {
-                    e.preventDefault();
-                    var postId = $(this).attr('id');
-                    var like = $("#" + postId + " span:last");
-                    var heart = $("#" + postId + " span:first");
-                    var data = new FormData();
-                    data.append('postId', postId);
+        $(document).ready(function () {
+            $('.btn-sm').click(function (e) {
+                e.preventDefault();
+                var postId = $(this).attr('id');
+                var like = $("#" + postId + " span:last");
+                var heart = $("#" + postId + " span:first");
+                var data = new FormData();
+                data.append('postId', postId);
 
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("AddLike", "Group")',
-                        contentType: false,
-                        processData: false,
-                        data: data,
-                        success: function (result) {
-                            like.empty();
-                            like.append(result);
-                            heart.removeClass('glyphicon glyphicon-heart-empty').addClass('glyphicon glyphicon-heart');
-                        },
-                        error: function (xhr, status, p3) {
-                            alert(xhr.responsetext);
-                        }
-                    });
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AddLike", "Group")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        like.empty();
+                        like.append(result);
+                        heart.removeClass('glyphicon glyphicon-heart-empty').addClass('glyphicon glyphicon-heart');
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
                 });
             });
+        });
 
-            $(document).ready(function () {
-                $('.btn-danger').click(function (e) {
-                    e.preventDefault();
-                    var postId = $(this).attr('id');
-                    var postDiv = $('div').filter('#' + postId);
-                    var data = new FormData();
-                    data.append('postId', postId);
+        $(document).ready(function () {
+            $('.btn-danger').click(function (e) {
+                e.preventDefault();
+                var postId = $(this).attr('id');
+                var postDiv = $('div').filter('#' + postId);
+                var data = new FormData();
+                data.append('postId', postId);
 
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("RemovePost", "Group")',
-                        contentType: false,
-                        processData: false,
-                        data: data,
-                        success: function (result) {
-                            postDiv.hide(200);
-                        },
-                        error: function (xhr, status, p3) {
-                            alert(xhr.responsetext);
-                        }
-                    });
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("RemovePost", "Group")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        postDiv.hide(200);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
                 });
             });
-        </script>
-    }
+        });
+    </script>
+}

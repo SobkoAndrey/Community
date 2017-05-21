@@ -12,6 +12,7 @@ using System.IO;
 
 namespace Community3.Controllers
 {
+    [Authorize(Roles = "user")]
     public class GroupController : Controller
     {
 
@@ -29,6 +30,7 @@ namespace Community3.Controllers
         {
             ViewBag.userId = User.Identity.GetUserId();
             var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
+            ViewBag.currentUser = UserManager.FindById(User.Identity.GetUserId());
             return View(group);
         }
 
@@ -63,46 +65,46 @@ namespace Community3.Controllers
             return View(group);
         }
 
-        public ActionResult ChangeImage(HttpPostedFileBase file, int id)
-        {
-            if (file == null)
-            {
-                return View("WrongFileExtensionError");
-            }
+        //public ActionResult ChangeImage(HttpPostedFileBase file, int id)
+        //{
+        //    if (file == null)
+        //    {
+        //        return View("WrongFileExtensionError");
+        //    }
 
-            var grp = new Group();
-            var helper = new ImageHelper();
-            var image = helper.GetImageFromFile(file);
+        //    var grp = new Group();
+        //    var helper = new ImageHelper();
+        //    var image = helper.GetImageFromFile(file);
 
-            if (image != null)
-            {
-                using (ApplicationDbContext)
-                {
-                    var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
-                    var oldPhotoId = group.ImageId;
-                    group.ImageId = image.ImageId;
-                    group.Image = image;
-                    group.Owner = UserManager.FindById(User.Identity.GetUserId());
-                    ApplicationDbContext.SaveChanges();
+        //    if (image != null)
+        //    {
+        //        using (ApplicationDbContext)
+        //        {
+        //            var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
+        //            var oldPhotoId = group.ImageId;
+        //            group.ImageId = image.ImageId;
+        //            group.Image = image;
+        //            group.Owner = UserManager.FindById(User.Identity.GetUserId());
+        //            ApplicationDbContext.SaveChanges();
 
-                    if (oldPhotoId != null)
-                    {
-                        var imageHelper = new ImageHelper();
-                        imageHelper.DeleteImageById(oldPhotoId.Value);
-                    }
-                    grp = group;
-                }
+        //            if (oldPhotoId != null)
+        //            {
+        //                var imageHelper = new ImageHelper();
+        //                imageHelper.DeleteImageById(oldPhotoId.Value);
+        //            }
+        //            grp = group;
+        //        }
 
-            }
-            else
+        //    }
+        //    else
 
-            {
-                return View("WrongFileExtensionError");
-            }
+        //    {
+        //        return View("WrongFileExtensionError");
+        //    }
 
-            ViewBag.Avatar = "Готово!";
-            return View("ManageGroup", grp);
-        }
+        //    ViewBag.Avatar = "Готово!";
+        //    return View("ManageGroup", grp);
+        //}
 
         public ActionResult EditGroupInfo(int id, string name = "", string description = "")
         {
@@ -137,7 +139,7 @@ namespace Community3.Controllers
                 {
                     var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
                     group.Audios.Add(audio);
-                    audio.OwnersGroups.Add(group);
+                    //audio.OwnersGroups.Add(group);
                     ApplicationDbContext.SaveChanges();
                     grp = group;
                 }
@@ -184,8 +186,8 @@ namespace Community3.Controllers
                 {
                     var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
                     group.Images.Add(image);
-                    image.GroupId = group.GroupId;
-                    image.Group = group;
+                    //image.GroupId = group.GroupId;
+                    //image.Group = group;
                     ApplicationDbContext.SaveChanges();
                     grp = group;
                 }
@@ -226,7 +228,6 @@ namespace Community3.Controllers
                 user.Groups.Add(group);
                 group.AppUsers.Add(user);
                 ApplicationDbContext.SaveChanges();
-                UserManager.Update(user);
                 grp = group;
             }
             return RedirectToRoute("Default", new { controller = "Group", action = "ShowGroupPage", id = id });
@@ -332,18 +333,32 @@ namespace Community3.Controllers
             return PartialView("_Audios", audios);
         }
 
-        public ActionResult CreatePost(int groupId, int postId)
+        public ActionResult CreatePost(string currentUserId, int? groupId, int postId)
         {
+            if (groupId != null)
+            {
+                using (ApplicationDbContext)
+                {
+                    var post = ApplicationDbContext.Posts.Where(p => p.PostId == postId).FirstOrDefault();
+                    post.GroupId = groupId;
+                    post.CreationDate = DateTime.Now;
+                    var group = ApplicationDbContext.Groups.Where(g => g.GroupId == groupId).FirstOrDefault();
+                    group.Posts.Add(post);
+                    ApplicationDbContext.SaveChanges();
+                }
+                return RedirectToAction("ShowGroupPage", new { id = groupId });
+            }
+
             using (ApplicationDbContext)
             {
                 var post = ApplicationDbContext.Posts.Where(p => p.PostId == postId).FirstOrDefault();
-                post.GroupId = groupId;
+                post.AppUserId = currentUserId;
                 post.CreationDate = DateTime.Now;
-                var group = ApplicationDbContext.Groups.Where(g => g.GroupId == groupId).FirstOrDefault();
-                group.Posts.Add(post);
+                var user = UserManager.FindById(currentUserId);
+                user.Posts.Add(post);
                 ApplicationDbContext.SaveChanges();
             }
-            return RedirectToAction("ShowGroupPage", new { id = groupId });
+            return RedirectToAction("News", "Home", new { id = currentUserId });
         }
 
 
@@ -379,6 +394,14 @@ namespace Community3.Controllers
 
             var postHelper = new PostHelper();
             postHelper.DeletePostById(postId);
+        }
+
+        public ActionResult RemoveGroup(int id)
+        {
+            var groupHelper = new GroupHelper();
+            groupHelper.DeleteGroupById(id);
+
+            return RedirectToAction("Groups", "Home");
         }
     }
 }

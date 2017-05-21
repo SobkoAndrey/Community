@@ -15,6 +15,12 @@
             <div class="navbar-header" style="margin-left:5.5%">
                 @Html.ActionLink("Community", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
+            <div class="navbar-header">
+                @if (User.IsInRole("admin"))
+                {
+                    @Html.ActionLink("Управление", "AdminPage", "Admin", new { }, new { @class = "navbar-brand" })
+                }
+            </div>
             <div class="navbar-collapse collapse" style="margin-right:4%">
                 @Html.Partial("_LoginPartial")
             </div>
@@ -27,42 +33,48 @@
             </div>
             <div class="col-md-3">
                 <div class="list-group">
+                    <a href="/Home/News" class="list-group-item">
+                        <span class="glyphicon glyphicon-list-alt"></span> Мои новости <span class="badge"></span>
+                    </a>
                     <a href="/Home/Dialogues" class="list-group-item">
                         <span class="glyphicon glyphicon-envelope"></span> Мои диалоги <span class="badge"></span>
                     </a>
-                    <a href="/Users/MyPhotos" class="list-group-item">
+                    <a href="/Home/Photos" class="list-group-item">
                         <span class="glyphicon glyphicon-camera"></span> Мои фотографии <span class="badge"></span>
                     </a>
                     <a href="/Home/Groups" class="list-group-item">
                         <span class="glyphicon glyphicon-link"></span> Мои группы <span class="badge"></span>
                     </a>
-                    <a href="/Users/MyFriends" class="list-group-item">
+                    <a href="/Home/Friends" class="list-group-item">
                         <span class="glyphicon glyphicon-user"></span> Мои друзья <span class="badge"></span>
                     </a>
-                    <a href="/Users/MyMusic" class="list-group-item">
+                    <a href="/Home/Music" class="list-group-item">
                         <span class="glyphicon glyphicon-music"></span> Моя музыка <span class="badge"></span>
                     </a>
+                    <a href="/Home/MusicWebApi" class="list-group-item">
+                        <span class="glyphicon glyphicon-music"></span> Моя музыка WebApi <span class="badge"></span>
+                    </a>
                 </div>
-                    @if (IsSectionDefined("Group"))
-                    {
-                        <div>
-                            @RenderSection("Group")
-                        </div>
-                    }
+                @if (IsSectionDefined("Group"))
+                {
+                    <div>
+                        @RenderSection("Group")
+                    </div>
+                }
 
-                    @if (IsSectionDefined("GroupRelation"))
-                    {
-                        <div>
-                            @RenderSection("GroupRelation")
-                        </div>
-                    }
+                @if (IsSectionDefined("GroupRelation"))
+                {
+                    <div>
+                        @RenderSection("GroupRelation")
+                    </div>
+                }
 
-                    @if (IsSectionDefined("CreateGroup"))
-                    {
-                        <div>
-                            @RenderSection("CreateGroup")
-                        </div>
-                    }
+                @if (IsSectionDefined("CreateGroup"))
+                {
+                    <div>
+                        @RenderSection("CreateGroup")
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -72,6 +84,6 @@
     <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
     <script src="~/signalr/hubs"></script>
     @RenderSection("scripts", required: false)
-    
+
 </body>
 </html>

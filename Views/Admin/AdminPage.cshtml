@@ -1,0 +1,241 @@
+﻿@model IEnumerable<Community3.Models.AppUser>
+
+    <body>
+        <div class="MainWindow">
+            <div class="container-fluid" style="padding-top: 2%">
+                <div class="row" style="margin-left: auto; margin-right:auto">
+                    <div class="col-md-12">
+                        <h4>Поиск пользователей</h4>
+                        <div class="input-group">
+                            <input id="user" type="text" class="form-control" aria-label="...">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Поиск по...<span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a id="id" href="#">ID</a></li>
+                                    <li><a id="name" href="#">Имени</a></li>
+                                    <li><a id="email" href="#">Почте</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br />
+                        <h4>Поиск групп</h4>
+                        <div class="input-group">
+                            <input id="group" type="text" class="form-control" aria-label="...">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Поиск по...<span class="caret"></span></button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a id="groupid" href="#">ID</a></li>
+                                    <li><a id="groupname" href="#">Названию</a></li>
+                                    <li><a id="ownerid" href="#">Основателю</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <br />
+                        <div id="userlist">
+                        </div>
+                        <div id="grouplist">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#id').click(function (e) {
+                e.preventDefault();
+                $('#grouplist, #userlist').empty();
+                var userId = $('#user').val();
+                var data = new FormData();
+
+                data.append("userId", userId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("IdSearchAjax", "Admin")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var userlist = $('#userlist');
+                        userlist.empty();
+                        userlist.append(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('#name').click(function (e) {
+                e.preventDefault();
+                $('#grouplist, #userlist').empty();
+                var userName = $('#user').val();
+                var data = new FormData();
+
+                data.append("userName", userName);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("NameSearchAjax", "Admin")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var userlist = $('#userlist');
+                        userlist.empty();
+                        userlist.append(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('#email').click(function (e) {
+                e.preventDefault();
+                $('#grouplist, #userlist').empty();
+                var userEmail = $('#user').val();
+                var data = new FormData();
+
+                data.append("userEmail", userEmail);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("EmailSearchAjax", "Admin")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var userlist = $('#userlist');
+                        userlist.empty();
+                        userlist.append(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('#groupid').click(function (e) {
+                e.preventDefault();
+                $('#grouplist, #userlist').empty();
+                var groupId = $('#group').val();
+                var data = new FormData();
+
+                data.append("groupId", groupId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GroupIdSearchAjax", "Admin")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var grouplist = $('#grouplist');
+                        grouplist.empty();
+                        grouplist.append(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('#groupname').click(function (e) {
+                e.preventDefault();
+                $('#grouplist, #userlist').empty();
+                var groupName = $('#group').val();
+                var data = new FormData();
+
+                data.append("groupName", groupName);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GroupNameSearchAjax", "Admin")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var grouplist = $('#grouplist');
+                        grouplist.empty();
+                        grouplist.append(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('#ownerid').click(function (e) {
+                e.preventDefault();
+                $('#grouplist, #userlist').empty();
+                var ownerId = $('#group').val();
+                var data = new FormData();
+
+                data.append("ownerId", ownerId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GroupOwnerSearchAjax", "Admin")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        var grouplist = $('#grouplist');
+                        grouplist.empty();
+                        grouplist.append(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('button[value=2]').click(function (e) {
+                e.preventDefault();
+                var userId = $(this).attr('id');
+
+                data.append("userId", userId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AddUserAdminRoleAjax", "Admin")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        alert(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+
+            $('.btn, .btn-info, .btn-xs').click(function () {
+
+                var userId = $(this).attr('id');
+
+                data.append("userId", userId);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("AddUserModerRoleAjax", "Admin")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        alert(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+        });
+    </script>
+}

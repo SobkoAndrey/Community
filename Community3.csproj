@@ -60,12 +60,24 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -175,7 +187,10 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -183,8 +198,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AudioHelper.cs" />
+    <Compile Include="Helpers\ChatHelper.cs" />
+    <Compile Include="Helpers\GroupHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\PostHelper.cs" />
+    <Compile Include="Helpers\RoleExtension.cs" />
     <Compile Include="Helpers\UserHelpers.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Migrations\201703201454122_InitialCreate.cs" />
@@ -275,14 +293,31 @@
     <Content Include="Views\Group\ShowImages.cshtml" />
     <Content Include="Views\Group\ShowParticipants.cshtml" />
     <Content Include="Views\Group\AddPost.cshtml" />
-    <Content Include="Views\Group\AddMultimediaToPost.cshtml" />
-    <Content Include="Views\Group\_Post.cshtml" />
-    <Content Include="Views\Group\_Images.cshtml" />
+    <Content Include="Views\Shared\AddMultimediaToPost.cshtml" />
+    <Content Include="Views\Shared\_Post.cshtml" />
+    <Content Include="Views\Shared\_Images.cshtml" />
     <Content Include="Views\Group\_Audios.cshtml" />
     <Content Include="Views\Group\_Likes.cshtml" />
     <Content Include="Views\Home\ChatRoom.cshtml" />
     <Content Include="Views\Home\Dialogues.cshtml" />
     <Content Include="Views\Home\_Message.cshtml" />
+    <Content Include="Views\Home\Friends.cshtml" />
+    <Content Include="Views\Home\News.cshtml" />
+    <Content Include="Views\Home\AddNews.cshtml" />
+    <Content Include="Views\Home\Photos.cshtml" />
+    <Content Include="Views\Home\AddImageToAlbum.cshtml" />
+    <Content Include="Views\Home\ShowPhotos.cshtml" />
+    <Content Include="Views\Home\Music.cshtml" />
+    <Content Include="Views\Home\AddAudioToAlbum.cshtml" />
+    <Content Include="Views\Home\ShowMusic.cshtml" />
+    <Content Include="Views\Shared\_Audio.cshtml" />
+    <Content Include="Views\Admin\AdminPage.cshtml" />
+    <Content Include="Views\Admin\_UsersList.cshtml" />
+    <Content Include="Views\Shared\_EmptyList.cshtml" />
+    <Content Include="Views\Admin\ManageUser.cshtml" />
+    <Content Include="Views\Admin\_GroupsList.cshtml" />
+    <Content Include="Views\Home\_Users.cshtml" />
+    <Content Include="Views\Home\MusicWebApi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
