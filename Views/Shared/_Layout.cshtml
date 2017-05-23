@@ -4,10 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title – приложение ASP.NET</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <link href="@Url.Content("~/style.css")" rel="stylesheet" type="text/css" />
 </head>
 <body class="MainBack">
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -81,6 +79,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
     <script src="~/signalr/hubs"></script>
     @RenderSection("scripts", required: false)

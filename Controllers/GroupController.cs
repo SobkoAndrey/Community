@@ -42,21 +42,26 @@ namespace Community3.Controllers
         [HttpPost]
         public ActionResult CreateGroup(GroupCreationModel model)
         {
-            var grp = new Group();
-            using (ApplicationDbContext)
+            if (ModelState.IsValid)
             {
-                var group = new Group();
-                group.Name = model.Name;
-                group.Description = model.Description;
-                group.OwnerId = UserManager.FindById(User.Identity.GetUserId()).Id;
-                group.Owner = UserManager.FindById(User.Identity.GetUserId());
-                group.CreationDate = DateTime.Now;
-                ApplicationDbContext.Groups.Add(group);
-                ApplicationDbContext.SaveChanges();
-                grp = group;
+                var grp = new Group();
+                using (ApplicationDbContext)
+                {
+                    var group = new Group();
+                    group.Name = model.Name;
+                    group.Description = model.Description;
+                    group.OwnerId = UserManager.FindById(User.Identity.GetUserId()).Id;
+                    group.Owner = UserManager.FindById(User.Identity.GetUserId());
+                    group.CreationDate = DateTime.Now;
+                    ApplicationDbContext.Groups.Add(group);
+                    ApplicationDbContext.SaveChanges();
+                    grp = group;
+                }
+
+                return RedirectToRoute("Default", new { controller = "Group", action = "ShowGroupPage", id = grp.GroupId });
             }
 
-            return RedirectToRoute("Default", new { controller = "Group", action = "ShowGroupPage", id = grp.GroupId });
+            return View();
         }
 
         public ActionResult ManageGroup(int id)
@@ -65,54 +70,33 @@ namespace Community3.Controllers
             return View(group);
         }
 
-        //public ActionResult ChangeImage(HttpPostedFileBase file, int id)
+        //public ActionResult EditGroupInfo(int id, string name = "", string description = "")
         //{
-        //    if (file == null)
-        //    {
-        //        return View("WrongFileExtensionError");
-        //    }
-
         //    var grp = new Group();
-        //    var helper = new ImageHelper();
-        //    var image = helper.GetImageFromFile(file);
-
-        //    if (image != null)
+        //    using (ApplicationDbContext)
         //    {
-        //        using (ApplicationDbContext)
-        //        {
-        //            var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
-        //            var oldPhotoId = group.ImageId;
-        //            group.ImageId = image.ImageId;
-        //            group.Image = image;
-        //            group.Owner = UserManager.FindById(User.Identity.GetUserId());
-        //            ApplicationDbContext.SaveChanges();
-
-        //            if (oldPhotoId != null)
-        //            {
-        //                var imageHelper = new ImageHelper();
-        //                imageHelper.DeleteImageById(oldPhotoId.Value);
-        //            }
-        //            grp = group;
-        //        }
-
+        //        var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
+        //        group.Name = name;
+        //        group.Description = description;
+        //        group.Owner = UserManager.FindById(User.Identity.GetUserId());
+        //        ApplicationDbContext.SaveChanges();
+        //        grp = group;
         //    }
-        //    else
-
-        //    {
-        //        return View("WrongFileExtensionError");
-        //    }
-
-        //    ViewBag.Avatar = "Готово!";
+        //    ViewBag.Info = "Готово!";
         //    return View("ManageGroup", grp);
         //}
 
-        public ActionResult EditGroupInfo(int id, string name = "", string description = "")
+        [ValidateAntiForgeryToken]
+        public ActionResult EditGroupInfo(int id, string name, string description = "")
         {
             var grp = new Group();
             using (ApplicationDbContext)
             {
                 var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
-                group.Name = name;
+                if (name != null)
+                {
+                    group.Name = name;
+                }
                 group.Description = description;
                 group.Owner = UserManager.FindById(User.Identity.GetUserId());
                 ApplicationDbContext.SaveChanges();

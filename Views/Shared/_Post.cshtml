@@ -1,4 +1,5 @@
 ﻿@model Community3.Models.Post
+
 <div id="@Model.PostId">
     <input id="postId" type="hidden" value="@Model.PostId" />
     <div class="row">
@@ -33,13 +34,13 @@
             <div style="text-align:right">
                 @if ((Model.Group != null && Model.Group.OwnerId == ViewBag.currentUser.Id) || (Model.AppUser != null && Model.AppUserId == ViewBag.currentUser.Id) || User.IsInRole("admin") || User.IsInRole("moder"))
                 {
-                    <button id="@Model.PostId" value="" class="btn btn-danger">Удалить новость</button>
+                    <button id="@Model.PostId" value="remove" class="btn btn-danger">Удалить новость</button>
                 }
             </div>
         </div>
     </div>
     <hr />
-    <h4 style="text-align:left">@Model.Name</h4>
+    <h4 style="text-align:left">@Model.Name </h4>
     <div style="text-align:left">@Model.Text</div>
 
     <div>

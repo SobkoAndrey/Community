@@ -7,25 +7,19 @@
     <div class="container-fluid" style="padding-top: 2%">
         <div class="row" style="margin-left: auto">
             <div class="col-md-12" style="text-align:center">
-                <form action="@Url.Action("ChangeImage", "Group", new { id = Model.GroupId})" method="post" enctype="multipart/form-data">
-                    <div style="font-weight:600">Загрузить фотографию</div>
-                    <div style="display:inline-block">
-                        <input type="file" name="file" lang="en-us" />
-                    </div> <br />
-                    <input type="submit" value="Загрузить" lang="en-us" /> @ViewBag.Avatar
-                </form>
-                <br />
                 @using (Html.BeginForm("EditGroupInfo", "Group"))
                 {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary()
                     <input type="hidden" name="id" value="@Model.GroupId" />
                     <div>
-                        @Html.LabelFor(g => g.Name) <br />
-                        @Html.EditorFor(g => g.Name)
+                        @Html.LabelFor(_ => _.Name) <br />
+                        @Html.EditorFor(_ => _.Name)
                     </div>
                     <br />
                     <div>
-                        @Html.LabelFor(g => g.Description) <br />
-                        @Html.EditorFor(g => g.Description)
+                        @Html.LabelFor(_ => _.Description) <br />
+                        @Html.EditorFor(_ => _.Description)
                     </div>
                     <br />
                     <div>
@@ -54,4 +48,3 @@
         </div>
     </div>
 </div>
-

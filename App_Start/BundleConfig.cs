@@ -12,6 +12,7 @@ namespace Community3
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+                        "~/Scripts/jquery.unobtrusive*",
                         "~/Scripts/jquery.validate*"));
 
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
@@ -25,6 +26,7 @@ namespace Community3
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/style.css",
                       "~/Content/site.css"));
         }
     }

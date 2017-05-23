@@ -1,41 +1,48 @@
 ﻿@model Community3.Models.UserProfileEditModel
 
-@{
-    ViewBag.Title = "EditProfile";
-}
-
-<body>
-
     <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
         <div class="container-fluid" style="padding-top: 2%">
-            <div class="row" style="margin-left: auto">
-                <div class="col-md-12" style="text-align:center">
+            <div class="row" style="margin-left: auto; margin-right:auto">
+                <div class="col-md-12">
                     @using (Html.BeginForm("EditProfile", "Home"))
                     {
-                        @Html.ValidationSummary(false)
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary()
                         <div>
-                            <label>Пол</label><br />
-                            @Html.EditorFor(_ => _.Gender, "GenderTemplate")
+                            <div>
+                                @Html.LabelFor(m => m.Gender)
+                            </div>
+                            <div>
+                                @Html.EditorFor(_ => _.Gender, "GenderTemplate")
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                @Html.LabelFor(m => m.Location)
+                            </div>
+                            <div>
+                                @Html.EditorFor(_=>_.Location)
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                @Html.LabelFor(m => m.Birthday)
+                            </div>
+                            <div>
+                                @Html.EditorFor(_ => _.Birthday)
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                @Html.LabelFor(m => m.Description)
+                            </div>
+                            <div>
+                                <textarea name="Description" class="form-control" rows="3" style="resize:none"></textarea>
+                            </div>
                         </div>
                         <br />
                         <div>
-                            <label>Город</label><br />
-                            @Html.EditorFor(_ => _.Location)
-                        </div>
-                        <br />
-                        <div>
-                            <label>День рождения в формате дд.мм.гггг</label><br />
-                            @Html.EditorFor(_ => _.Birthday)
-                            @Html.ValidationMessageFor(_=>_.Birthday)
-                        </div>
-                        <br />
-                        <div>
-                            <label>О вас</label><br />
-                            @Html.EditorFor(_ => _.Description)
-                        </div>
-                        <br />
-                        <div>
-                            <input type="submit" name="submit" />
+                            <input type="submit" value="Подтвердить" />
                         </div>
                         <br />
                     }
@@ -43,6 +50,3 @@
             </div>
         </div>
     </div>
-</body>
-
-

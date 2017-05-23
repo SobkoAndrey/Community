@@ -29,7 +29,7 @@ namespace Community3.Controllers
         {
             var userId = User.Identity.GetUserId();
 
-            if(UserManager.IsInRole(userId, "blocked"))
+            if (UserManager.IsInRole(userId, "blocked"))
             {
                 ViewBag.blocked = "blocked";
             }
@@ -99,7 +99,7 @@ namespace Community3.Controllers
                 var helper = new ImageHelper();
                 var image = helper.GetImageFromFile(file);
 
-                if(image != null)
+                if (image != null)
                 {
                     using (ApplicationDbContext)
                     {
@@ -114,6 +114,17 @@ namespace Community3.Controllers
             }
 
             return View("Error");
+        }
+
+        [Authorize(Roles = "user")]
+        public ActionResult RemoveImage(string userId, int imageId)
+        {
+            var user = UserManager.FindById(userId);
+
+            var imageHelper = new ImageHelper();
+            imageHelper.DeleteImageById(imageId);
+
+            return RedirectToAction("Photos", user);
         }
 
         [Authorize(Roles = "user")]
@@ -178,14 +189,14 @@ namespace Community3.Controllers
             var searchString = Request.Form.GetValues("searchString")[0];
             var user = UserManager.FindById(userId);
 
-            if(searchString.Length == 0)
+            if (searchString.Length == 0)
             {
                 return PartialView("_Audio", user.Audios);
             }
 
             var musicList = new List<Audio>();
 
-            foreach(var audio in user.Audios)
+            foreach (var audio in user.Audios)
             {
                 if (audio.Label.ToLower().Contains(searchString.ToLower()))
                 {
@@ -376,6 +387,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult EditProfile()
         {
             var model = new UserProfileEditModel();
@@ -385,20 +397,29 @@ namespace Community3.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult EditProfile(UserProfileEditModel model)
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            using (ApplicationDbContext context = new ApplicationDbContext())
+            if (ModelState.IsValid)
             {
-                user.Gender = model.Gender;
-                user.Location = model.Location;
-                user.Birthday = model.Birthday;
-                user.Description = model.Description;
-                UserManager.Update(user);
-                context.SaveChanges();
-            }
+                var user = UserManager.FindById(User.Identity.GetUserId());
+                using (ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    user.Gender = model.Gender;
+                    user.Location = model.Location;
+                    user.Birthday = model.Birthday;
+                    user.Description = model.Description;
+                    UserManager.Update(user);
+                    context.SaveChanges();
+                }
 
-            return RedirectToAction("UserProfile", new { id = user.Id });
+                return RedirectToAction("UserProfile", new { id = user.Id });
+
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         [Authorize(Roles = "user")]
@@ -408,46 +429,6 @@ namespace Community3.Controllers
             var user = UserManager.FindById(User.Identity.GetUserId());
             return View(user);
         }
-
-        //[HttpPost]
-        //public async System.Threading.Tasks.Task<ActionResult> ChangePhoto(HttpPostedFileBase file)
-        //{
-        //    //if (file == null)
-        //    //{
-        //    //    return View("WrongFileExtensionError");
-        //    //}
-
-        //    //var user = UserManager.FindById(User.Identity.GetUserId());
-        //    //var oldPhotoId = user.PhotoId;
-        //    //var helper = new ImageHelper();
-        //    //var image = helper.GetImageFromFile(file);
-
-        //    //if (image != null)
-        //    //{
-        //    //    using (ApplicationDbContext)
-        //    //    {
-        //    //        user.PhotoId = image.ImageId;
-        //    //        user.Photo = image;
-        //    //        user.Images.Add(image);
-        //    //        ApplicationDbContext.SaveChanges();
-        //    //        var result = await UserManager.UpdateAsync(user);
-        //    //        if (oldPhotoId != null)
-        //    //        {
-        //    //            var imageHelper = new ImageHelper();
-        //    //            imageHelper.DeleteImageById(oldPhotoId.Value);
-        //    //        }
-        //    //    }
-        //    //}
-        //    //else
-
-
-        //    //{
-        //    //    return View("WrongFileExtensionError");
-        //    //}
-
-        //    //return RedirectToAction("UserProfile", new { id = user.Id });
-
-        //}
 
         [Authorize(Roles = "user")]
         [HttpGet]

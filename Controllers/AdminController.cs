@@ -230,6 +230,17 @@ namespace Community3.Controllers
                 }
             }
 
+            foreach (var appUser in userManager.Users)
+            {
+                    var userToDelete = appUser.Candidates.Where(_ => _.Id == user.Id).FirstOrDefault();
+
+                    if (userToDelete != null)
+                    {
+                        RemoveUserFromCandidates(appUser.Id, userToDelete.Id);
+                    }           
+            }
+
+
             DeleteUser(user.Id);
             return RedirectToAction("AdminPage"); ;
         }
@@ -268,6 +279,19 @@ namespace Community3.Controllers
             }
         }
 
+        public void RemoveUserFromCandidates(string userId, string userToDeleteId)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var userManager = new ApplicationUserManager(new UserStore<AppUser>(context));
+                var user = userManager.FindById(userId);
+                var userToDelete = userManager.FindById(userToDeleteId);
+                user.Candidates.Remove(userToDelete);
+                userManager.Update(user);
+                context.SaveChanges();
+            }
+        }
+
 
         public ActionResult BlockUnblockUser(string id)
         {
@@ -291,10 +315,11 @@ namespace Community3.Controllers
         {
             var userManager = new ApplicationUserManager(new UserStore<AppUser>(new ApplicationDbContext()));
 
-            if(userManager.IsInRole(id, "admin"))
+            if (userManager.IsInRole(id, "admin"))
             {
                 userManager.RemoveFromRole(id, "admin");
-            } else
+            }
+            else
             {
                 userManager.AddToRole(id, "admin");
             }

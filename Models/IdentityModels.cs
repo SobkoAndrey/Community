@@ -20,12 +20,8 @@ namespace Community3.Models
 
     public class AppUser : IdentityUser
     {
-        [Required]
-        [MaxLength(15), MinLength(2)]
         public string Name { get; set; }
 
-        [Required]
-        [MaxLength(20)]
         public string Surname { get; set; }
 
         public string FullName
@@ -38,17 +34,11 @@ namespace Community3.Models
 
         public Gender Gender { get; set; }
 
-        //[ForeignKey("Photo")]
-        //public int? PhotoId { get; set; }
-        //public virtual Image Photo { get; set; }
-
         public string Location { get; set; }
 
-        [UIHint("MultilineText")]
         public string Description { get; set; }
 
         [DataType(DataType.Date)]
-        [RegularExpression(@"\d\d\.\d\d\.\d\d\d\d", ErrorMessage = "Некорректная дата")]
         public DateTime? Birthday { get; set; }
 
         public virtual ICollection<Post> Posts { get; set; }
@@ -83,18 +73,14 @@ namespace Community3.Models
         public int GroupId { get; set; }
 
         [Required]
-        [MaxLength(50), MinLength(1)]
-        [Display(Name = "Название")]
+        [StringLength(50, ErrorMessage = "Название группы не должно превышать 50 символов")]
+        [Display(Name = "Название группы")]
         public string Name { get; set; }
 
+        [Display(Name = "Информация о группе")]
+        [StringLength(200, ErrorMessage = "Информация о группе не должна превышать 200 символов")]
         [UIHint("MultilineText")]
-        [Display(Name = "Описание")]
         public string Description { get; set; }
-
-        //[ForeignKey("Image")]
-        //public int? ImageId { get; set; }
-
-        //public virtual Image Image { get; set; }
 
         [Required]
         [ForeignKey("Owner")]
@@ -216,12 +202,10 @@ namespace Community3.Models
         [Required]
         public int PostId { get; set; }
 
-        [Required(ErrorMessage = "Поле должно быть установлено")]
         public string Name { get; set; }
         [Required]
         public DateTime CreationDate { get; set; }
 
-        [UIHint("MultilineText")]
         public string Text { get; set; }
 
         [ForeignKey("AppUser")]

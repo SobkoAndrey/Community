@@ -30,18 +30,18 @@
                         <br />
                         if (ViewBag.blocked == "blocked")
                         {
-                        <div>@Html.ActionLink("Разблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
+                            <div>@Html.ActionLink("Разблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
                         }
                         else
                         {
-                        <div>@Html.ActionLink("Заблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
+                            <div>@Html.ActionLink("Заблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
                         }
                     }
 
                     @if (User.IsInRole("admin") && ViewBag.currentUser != Model)
                     {
                         <br />
-                        <div>@Html.ActionLink("Удалить пользователя", "RemoveUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>   
+                        <div>@Html.ActionLink("Удалить пользователя", "RemoveUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
                     }
                 </div>
                 <div class="col-md-8">
@@ -115,11 +115,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 @Html.ActionLink("Редактировать профиль", "EditProfile", "Home") <br />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                @Html.ActionLink("Добавить/поменять фотографию", "ChangePhoto", "Home") <br />
                             </div>
                         </div>
                     }
@@ -269,7 +264,7 @@
             });
 
             $(document).ready(function () {
-                $('button[value]').click(function (e) {
+                $('button[value=remove]').click(function (e) {
                     e.preventDefault();
                     var postId = $(this).attr('id');
                     var postDiv = $('div').filter('#' + postId);

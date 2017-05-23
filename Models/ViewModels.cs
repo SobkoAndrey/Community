@@ -8,16 +8,32 @@ namespace Community3.Models
 {
     public class UserProfileEditModel
     {
+        [Display(Name = "Пол")]
         public Gender Gender { get; set; }
 
-        [StringLength(3, ErrorMessage = "fdgdfgfdgdg")]
+        [Display(Name = "Населенный пункт")]
+        [StringLength(30, ErrorMessage = "Название населенного пункта не должено превышать 30 символов")]
         public string Location { get; set; }
 
-        [UIHint("MultilineText")]
+        [Display(Name = "Информация о вас")]
+        [StringLength(200, ErrorMessage = "Информация о вас не должна превышать 200 символов")]
         public string Description { get; set; }
 
+        [Display(Name = "День рождения в формате дд.мм.гггг")]
         [DataType(DataType.Date)]
-        [RegularExpression(@"\d{1,2}/.\d{1,2}/.\d{2,4}", ErrorMessage = "Некорректная дата")]
         public DateTime? Birthday { get; set; }
     }
+
+    public class GroupCreationModel
+    {
+        [Required]
+        [Display(Name = "Название группы")]
+        [StringLength(50, ErrorMessage = "Название группы не должно превышать 50 символов")]
+        public string Name { get; set; }
+
+        [Display(Name = "Информация о группе")]
+        [StringLength(200, ErrorMessage = "Информация о группе не должна превышать 200 символов")]
+        public string Description { get; set; }
+    }
+
 }
