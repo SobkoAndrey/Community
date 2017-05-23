@@ -25,19 +25,22 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user, blocked")]
+        [HttpGet]
         public ActionResult Index()
         {
+            var manager = new UserManager<AppUser>(new UserStore<AppUser>(new ApplicationDbContext()));
             var userId = User.Identity.GetUserId();
 
-            if (UserManager.IsInRole(userId, "blocked"))
+            if (manager.IsInRole(userId, "blocked"))
             {
                 ViewBag.blocked = "blocked";
             }
-            //ViewBag.currentUser = user;
+
             return View();
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult News()
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
@@ -117,6 +120,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult RemoveImage(string userId, int imageId)
         {
             var user = UserManager.FindById(userId);
@@ -128,6 +132,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult Music()
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
@@ -135,6 +140,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult ShowMusic(string id)
         {
             var user = UserManager.FindById(id);
@@ -142,6 +148,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult MusicWebApi()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -183,6 +190,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpPost]
         public ActionResult MusicSearchAjax()
         {
             var userId = Request.Form.GetValues("userId")[0];
@@ -208,6 +216,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult Groups()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -216,12 +225,15 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult Friends()
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             return View(currentUser);
         }
 
+        [Authorize(Roles = "user")]
+        [HttpPost]
         public ActionResult UserSearchAjax()
         {
             var userName = Request.Form.GetValues("userName")[0];
@@ -237,6 +249,7 @@ namespace Community3.Controllers
 
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult Dialogues()
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
@@ -244,6 +257,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpPost]
         public void OfferFriendship()
         {
             using (ApplicationDbContext)
@@ -257,6 +271,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpPost]
         public void ConfirmFriendshipAjax()
         {
             using (ApplicationDbContext)
@@ -272,6 +287,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult ConfirmFriendship(string id)
         {
             using (ApplicationDbContext)
@@ -288,6 +304,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult RefuseFriendship(string id)
         {
             using (ApplicationDbContext)
@@ -302,6 +319,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpPost]
         public void FinishFriendship()
         {
             using (var context = new ApplicationDbContext())
@@ -318,6 +336,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult ChatRoom(string id)
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
@@ -344,6 +363,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpPost]
         public ActionResult ShowNewMessage()
         {
             var userId = Request.Form.GetValues("userId")[0];
@@ -368,6 +388,7 @@ namespace Community3.Controllers
         }
 
         [Authorize(Roles = "user")]
+        [HttpGet]
         public ActionResult UserProfile(string id)
         {
             var user = UserManager.FindById(id);
@@ -420,14 +441,6 @@ namespace Community3.Controllers
             {
                 return View(model);
             }
-        }
-
-        [Authorize(Roles = "user")]
-        public ActionResult ChangePhoto()
-        {
-
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            return View(user);
         }
 
         [Authorize(Roles = "user")]

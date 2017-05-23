@@ -10,7 +10,7 @@ using Community3.Helpers;
 
 namespace Community3.Controllers
 {
-    public class ClientController : ApiController
+    public class WebApiController : ApiController
     {
         [HttpPut]
         public void RenameAudio([FromBody]Audio audio)

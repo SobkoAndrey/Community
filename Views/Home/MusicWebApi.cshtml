@@ -56,7 +56,7 @@
 
                 $.ajax({
                     type: 'DELETE',
-                    url: 'http://localhost:50133/api/client/' + audioId,
+                    url: 'http://localhost:50133/api/webapi/' + audioId,
                     contentType: "application/json;charset=utf-8",
                     success: function () {
                         audioDiv.hide(200);
@@ -86,7 +86,7 @@
 
                 $.ajax({
                     type: 'PUT',
-                    url: 'http://localhost:50133/api/client',
+                    url: 'http://localhost:50133/api/webapi',
                     contentType: "application/json;charset=utf-8",
                     data: JSON.stringify(audio),
                     success: function () {
