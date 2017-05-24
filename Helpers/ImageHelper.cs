@@ -14,14 +14,14 @@ namespace Community3.Helpers
 {
     public class ImageHelper
     {
-        protected ApplicationDbContext ApplicationDbContext { get; set; }
-        protected UserManager<AppUser> UserManager { get; set; }
+        //protected ApplicationDbContext ApplicationDbContext { get; set; }
+        //protected UserManager<AppUser> UserManager { get; set; }
 
-        public ImageHelper()
-        {
-            this.ApplicationDbContext = new ApplicationDbContext();
-            this.UserManager = new UserManager<AppUser>(new UserStore<AppUser>(this.ApplicationDbContext));
-        }
+        //public ImageHelper()
+        //{
+        //    this.ApplicationDbContext = new ApplicationDbContext();
+        //    this.UserManager = new UserManager<AppUser>(new UserStore<AppUser>(this.ApplicationDbContext));
+        //}
 
         List<string> extensions = new List<string>() { ".jpg", ".gif", ".png" };
 
@@ -33,7 +33,14 @@ namespace Community3.Helpers
 
             if (extensions.Contains(extension.ToLower()) || extensions.Contains(extension.ToUpper()))
             {
-                file.SaveAs(System.Web.HttpContext.Current.Server.MapPath("~/Images/" + fileName));
+                try
+                {
+                    file.SaveAs(System.Web.HttpContext.Current.Server.MapPath("~/Images/" + fileName));
+                }
+                catch (Exception exception)
+                {
+                    return null;
+                }
 
                 Image image = new Image();
 

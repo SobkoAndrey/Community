@@ -13,6 +13,7 @@ using System.Net;
 
 namespace Community3.Controllers
 {
+    [HandleError(ExceptionType = typeof(Exception), View = "Error")]
     public class HomeController : Controller
     {
         protected ApplicationDbContext ApplicationDbContext { get; set; }
@@ -82,6 +83,10 @@ namespace Community3.Controllers
         public ActionResult ShowPhotos(string id)
         {
             var user = UserManager.FindById(id);
+            if (user == null)
+            {
+                return View("NullUserReferenceError");
+            }
             return View(user);
         }
 
@@ -113,7 +118,7 @@ namespace Community3.Controllers
                     return RedirectToAction("Photos");
                 }
 
-                return View("Error");
+                return View("WrongImageFileExtensionError");
             }
 
             return View("Error");
@@ -123,12 +128,19 @@ namespace Community3.Controllers
         [HttpGet]
         public ActionResult RemoveImage(string userId, int imageId)
         {
-            var user = UserManager.FindById(userId);
+            try
+            {
+                var user = UserManager.FindById(userId);
 
-            var imageHelper = new ImageHelper();
-            imageHelper.DeleteImageById(imageId);
+                var imageHelper = new ImageHelper();
+                imageHelper.DeleteImageById(imageId);
 
-            return RedirectToAction("Photos", user);
+                return RedirectToAction("Photos", user);
+            }
+            catch (Exception exception)
+            {
+                return View("Error");
+            }
         }
 
         [Authorize(Roles = "user")]
@@ -144,6 +156,10 @@ namespace Community3.Controllers
         public ActionResult ShowMusic(string id)
         {
             var user = UserManager.FindById(id);
+            if (user == null)
+            {
+                return View("NullUserReferenceError");
+            }
             return View(user);
         }
 
@@ -183,7 +199,7 @@ namespace Community3.Controllers
                     return RedirectToAction("Music");
                 }
 
-                return View("Error");
+                return View("WrongAudioFileExtensionError");
             }
 
             return View("Error");
@@ -341,6 +357,10 @@ namespace Community3.Controllers
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var interlocutor = UserManager.FindById(id);
+            if(interlocutor == null)
+            {
+                return View("NullUserReferenceError");
+            }
             ViewBag.currentUser = currentUser;
             ViewBag.interlocutor = interlocutor;
             foreach (var chat in ApplicationDbContext.ChatRooms)
@@ -350,6 +370,7 @@ namespace Community3.Controllers
                     return View(chat);
                 }
             }
+
             var chatRoom = new ChatRoom();
             using (ApplicationDbContext)
             {
@@ -392,6 +413,12 @@ namespace Community3.Controllers
         public ActionResult UserProfile(string id)
         {
             var user = UserManager.FindById(id);
+
+            if(user == null)
+            {
+                return View("NullUserReferenceError");
+            }
+
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             if (user != currentUser)
             {

@@ -286,7 +286,7 @@
     <Content Include="Views\Group\ShowGroupPage.cshtml" />
     <Content Include="Views\Home\Groups.cshtml" />
     <Content Include="Views\Group\CreateGroup.cshtml" />
-    <Content Include="Views\Shared\WrongFileExtensionError.cshtml" />
+    <Content Include="Views\Shared\WrongImageFileExtensionError.cshtml" />
     <Content Include="Views\Group\ManageGroup.cshtml" />
     <Content Include="Views\Group\ShowAudio.cshtml" />
     <Content Include="Views\Group\ShowImages.cshtml" />
@@ -317,6 +317,8 @@
     <Content Include="Views\Admin\_GroupsList.cshtml" />
     <Content Include="Views\Home\_Users.cshtml" />
     <Content Include="Views\Home\MusicWebApi.cshtml" />
+    <Content Include="Views\Shared\WrongAudioFileExtensionError.cshtml" />
+    <Content Include="Views\Shared\NullUserReferenceError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
