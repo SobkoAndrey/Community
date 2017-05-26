@@ -74,14 +74,15 @@ namespace Community3.Controllers
                 return View(model);
             }
             AppUser user = await UserManager.FindAsync(model.Email, model.Password);
-            if(user == null)
-            {
-                ModelState.AddModelError("", "Неудачная попытка входа.");
-                return View(model);
-            }
+            //var userName = _userManager.FindByEmail(model.Email).UserName;
+            //if (userName == null)
+            //{
+            //    ModelState.AddModelError("", "Неудачная попытка входа.");
+            //    return View(model);
+            //}
             // Сбои при входе не приводят к блокированию учетной записи
             // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -155,8 +156,7 @@ namespace Community3.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userName = Guid.NewGuid().ToString();
-                var user = new AppUser { Name = model.Name, UserName = userName, Email = model.Email, Gender = Gender.Empty, Surname = model.Surname };
+                var user = new AppUser { Name = model.Name, UserName = model.Email, Email = model.Email, Gender = Gender.Empty, Surname = model.Surname };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

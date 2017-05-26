@@ -159,14 +159,15 @@
 
 @section Group
     {
-    @if (Model.Images.Count > 0)
+<img src="@Url.Content(Model.Images.Count > 0 ? Model.Images.First().Path : "~/Content/no-image.jpg")" alt="Фото группы" title="@Model.Name" style="max-width: 100%; height:auto; border-radius: 10%" />
+    @*@if (Model.Images.Count > 0)
     {
         <img src="@Url.Content(Model.Images.First().Path)" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
-        <br />
+        <br />*@
         <div class="MainWindow" style="text-align:center">
             <div style="font-size:large">@Model.Name</div>
         </div>
-    }
+    @*}
     else
     {
         <img src="~/Content/no-image.jpg" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
@@ -174,7 +175,7 @@
         <div class="MainWindow" style="text-align:center">
             <div style="font-size:large">@Model.Name</div>
         </div>
-    }
+    }*@
     @if (User.IsInRole("admin"))
     {
         <br />
@@ -230,7 +231,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("AddLike", "Group")',
+                    url: '@Url.Action("AddLikeAjax", "Group")',
                     contentType: false,
                     processData: false,
                     data: data,
@@ -256,7 +257,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("RemovePost", "Group")',
+                    url: '@Url.Action("RemovePostAjax", "Group")',
                     contentType: false,
                     processData: false,
                     data: data,

@@ -25,8 +25,8 @@
                                 }
                             </div>
                         </div>
-                        <input id="hdId" type="hidden" />
-                        <input id="username" type="hidden" value="" />
+                        @*<input id="hdId" type="hidden" />
+                        <input id="username" type="hidden" value="" />*@
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("ShowNewMessage", "Home")',
+                    url: '@Url.Action("ShowNewMessageAjax", "Home")',
                     contentType: false,
                     processData: false,
                     data: data,

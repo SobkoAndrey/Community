@@ -128,19 +128,12 @@ namespace Community3.Controllers
         [HttpGet]
         public ActionResult RemoveImage(string userId, int imageId)
         {
-            try
-            {
                 var user = UserManager.FindById(userId);
 
                 var imageHelper = new ImageHelper();
                 imageHelper.DeleteImageById(imageId);
 
                 return RedirectToAction("Photos", user);
-            }
-            catch (Exception exception)
-            {
-                return View("Error");
-            }
         }
 
         [Authorize(Roles = "user")]
@@ -274,7 +267,7 @@ namespace Community3.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPost]
-        public void OfferFriendship()
+        public void OfferFriendshipAjax()
         {
             using (ApplicationDbContext)
             {
@@ -336,7 +329,7 @@ namespace Community3.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPost]
-        public void FinishFriendship()
+        public void FinishFriendshipAjax()
         {
             using (var context = new ApplicationDbContext())
             {
@@ -385,7 +378,7 @@ namespace Community3.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPost]
-        public ActionResult ShowNewMessage()
+        public ActionResult ShowNewMessageAjax()
         {
             var userId = Request.Form.GetValues("userId")[0];
             var message = Request.Form.GetValues("message")[0];
@@ -481,17 +474,22 @@ namespace Community3.Controllers
         [HttpPost]
         public ActionResult AddNews(Post post)
         {
-            using (ApplicationDbContext)
+            if (ModelState.IsValid)
             {
-                post.CreationDate = DateTime.Now;
-                ApplicationDbContext.Posts.Add(post);
-                ApplicationDbContext.SaveChanges();
+                using (ApplicationDbContext)
+                {
+                    post.CreationDate = DateTime.Now;
+                    ApplicationDbContext.Posts.Add(post);
+                    ApplicationDbContext.SaveChanges();
+                }
+                ViewBag.currentUserId = User.Identity.GetUserId();
+                ViewBag.postId = post.PostId;
+                return View("AddMultimediaToPost");
             }
-            ViewBag.currentUserId = User.Identity.GetUserId();
-            ViewBag.postId = post.PostId;
-            return View("AddMultimediaToPost");
+            else
+            {
+                return View();
+            }
         }
-
-
     }
 }

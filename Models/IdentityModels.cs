@@ -116,8 +116,7 @@ namespace Community3.Models
         public string Name { get; set; }
 
         public string Label { get; set; }
-
-        
+    
         public int? GroupId { get; set; }
         [ForeignKey("GroupId")]
         public virtual Group Group { get; set; }
@@ -126,14 +125,6 @@ namespace Community3.Models
         public int? PostId { get; set; }
         public virtual Post Post { get; set; }
 
-        //public virtual ICollection<AppUser> OwnersUsers { get; set; }
-        //public virtual ICollection<Group> OwnersGroups { get; set; }
-
-        //public Audio()
-        //{
-        //    this.OwnersUsers = new HashSet<AppUser>();
-        //    this.OwnersGroups = new HashSet<Group>();
-        //}
     }
 
     public class Image
@@ -147,11 +138,6 @@ namespace Community3.Models
 
         public string Label { get; set; }
 
-        //[ForeignKey("AppUser")]
-        //public string AppUserId { get; set; }
-        //public virtual AppUser AppUser { get; set; }
-
-        //[ForeignKey("Group")]
         public int? GroupId { get; set; }
         public virtual Group Group { get; set; }
 
@@ -159,7 +145,6 @@ namespace Community3.Models
         public int? PostId { get; set; }
         public virtual Post Post { get; set; }
 
-        //public virtual ICollection<AppUser> AppUsers { get; set; }
     }
 
     public class ChatRoom
@@ -202,10 +187,15 @@ namespace Community3.Models
         [Required]
         public int PostId { get; set; }
 
+        [Display(Name = "Заголовок")]
+        [StringLength(50, ErrorMessage = "Заголовок новости не должен превышать 50 символов")]
         public string Name { get; set; }
+
         [Required]
         public DateTime CreationDate { get; set; }
 
+        [Display(Name = "Текст")]
+        [StringLength(2000, ErrorMessage = "Текст новости не должен превышать 2000 символов")]
         public string Text { get; set; }
 
         [ForeignKey("AppUser")]

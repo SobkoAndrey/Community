@@ -1,47 +1,26 @@
 ﻿@model Community3.Models.AppUser
 
-@{
-    ViewBag.Title = "UserProfile";
-}
-
 <body>
 
     <div class="MainWindow">
         <div class="container-fluid" style="padding-top: 2%">
             <div class="row" style="margin-left: auto; margin-right:auto">
                 <div class="col-md-4">
-                    @if (Model.Images.Count != 0)
+                    <img src="@Url.Content(Model.Images.Count > 0 ? Model.Images.First().Path : "~/Content/no-avatar.png")" alt="Фотография пользователя" title="@Model.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
+                    @*@if (Model.Images.Count != 0)
                     {
                         <img src="@Url.Content(Model.Images.First().Path)" alt="fgj" title="fgn" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
                     }
                     else
                     {
                         <img src="@Url.Content("~/Content/no-avatar.png")" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
-                    }
+                    }*@
+                    <br />
                     <br />
                     @if (ViewBag.Access == "Denied")
                     {
                         <span>@Html.ActionLink("Фотографии", "ShowPhotos", new { id = Model.Id }, new { @class = "btn btn-primary btn-xs" })</span>
                         <span>@Html.ActionLink("Музыка", "ShowMusic", new { id = Model.Id }, new { @class = "btn btn-primary btn-xs" })</span>
-                    }
-                    @if (User.IsInRole("moder") && ViewBag.currentUser != Model)
-                    {
-                        <br />
-                        <br />
-                        if (ViewBag.blocked == "blocked")
-                        {
-                            <div>@Html.ActionLink("Разблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
-                        }
-                        else
-                        {
-                            <div>@Html.ActionLink("Заблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
-                        }
-                    }
-
-                    @if (User.IsInRole("admin") && ViewBag.currentUser != Model)
-                    {
-                        <br />
-                        <div>@Html.ActionLink("Удалить пользователя", "RemoveUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
                     }
                 </div>
                 <div class="col-md-8">
@@ -118,6 +97,26 @@
                             </div>
                         </div>
                     }
+
+                    @if (User.IsInRole("moder") && ViewBag.currentUser != Model)
+                    {
+                        <br />
+                        <br />
+                        if (ViewBag.blocked == "blocked")
+                        {
+                            <div>@Html.ActionLink("Разблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
+                        }
+                        else
+                        {
+                            <div>@Html.ActionLink("Заблокировать пользователя", "BlockUnblockUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
+                        }
+                    }
+
+                    @if (User.IsInRole("admin") && ViewBag.currentUser != Model)
+                    {
+                        <br />
+                        <div>@Html.ActionLink("Удалить пользователя", "RemoveUser", "Admin", new { id = Model.Id }, new { @class = "btn btn-danger" })</div>
+                    }
                 </div>
             </div>
         </div>
@@ -175,7 +174,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("OfferFriendship", "Home")',
+                    url: '@Url.Action("OfferFriendshipAjax", "Home")',
                     contentType: false,
                     processData: false,
                     data: data,
@@ -199,7 +198,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("FinishFriendship", "Home")',
+                    url: '@Url.Action("FinishFriendshipAjax", "Home")',
                     contentType: false,
                     processData: false,
                     data: data,
@@ -248,7 +247,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("AddLike", "Group")',
+                    url: '@Url.Action("AddLikeAjax", "Group")',
                     contentType: false,
                     processData: false,
                     data: data,
@@ -273,7 +272,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("RemovePost", "Group")',
+                        url: '@Url.Action("RemovePostAjax", "Group")',
                         contentType: false,
                         processData: false,
                         data: data,

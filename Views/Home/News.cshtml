@@ -36,7 +36,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("AddLike", "Group")',
+                    url: '@Url.Action("AddLikeAjax", "Group")',
                     contentType: false,
                     processData: false,
                     data: data,
@@ -62,7 +62,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("RemovePost", "Group")',
+                    url: '@Url.Action("RemovePostAjax", "Group")',
                     contentType: false,
                     processData: false,
                     data: data,

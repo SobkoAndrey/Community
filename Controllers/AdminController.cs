@@ -170,7 +170,6 @@ namespace Community3.Controllers
                 user.Friends.Clear();
                 user.ChatRooms.Clear();
 
-                //userManager.Update(user);
                 context.SaveChanges();
             }
 

@@ -44,7 +44,7 @@
                     data.append('postId', id);
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("AddImageToPost", "Group", new { postId = ViewBag.postId})',
+                        url: '@Url.Action("AddImageToPostAjax", "Group", new { postId = ViewBag.postId})',
                         contentType: false,
                         processData: false,
                         data: data,
@@ -77,7 +77,7 @@
                     data.append('postId', id);
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("AddAudioToPost", "Group", new { postId = ViewBag.postId})',
+                        url: '@Url.Action("AddAudioToPostAjax", "Group", new { postId = ViewBag.postId})',
                         contentType: false,
                         processData: false,
                         data: data,

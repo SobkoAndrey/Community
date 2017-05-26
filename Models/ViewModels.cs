@@ -19,8 +19,7 @@ namespace Community3.Models
         [StringLength(200, ErrorMessage = "Информация о вас не должна превышать 200 символов")]
         public string Description { get; set; }
 
-        [Display(Name = "День рождения в формате дд.мм.гггг")]
-        [DataType(DataType.Date)]
+        [Display(Name = "День рождения в формате гггг-мм-дд")]
         public DateTime? Birthday { get; set; }
     }
 

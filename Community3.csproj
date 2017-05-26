@@ -319,6 +319,7 @@
     <Content Include="Views\Home\MusicWebApi.cshtml" />
     <Content Include="Views\Shared\WrongAudioFileExtensionError.cshtml" />
     <Content Include="Views\Shared\NullUserReferenceError.cshtml" />
+    <Content Include="Views\Shared\NullGroupReferenceError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
