@@ -11,9 +11,11 @@ using System.Data.Entity;
 
 namespace Community3.Controllers
 {
+    [Authorize(Roles = "admin")]
+    [HandleError(ExceptionType = typeof(Exception), View = "Error")]
     public class AdminController : Controller
     {
-        [Authorize(Roles = "admin")]
+        [HttpGet]
         public ActionResult AdminPage()
         {
             var userManager = new ApplicationUserManager(new UserStore<AppUser>(new ApplicationDbContext()));
@@ -22,6 +24,7 @@ namespace Community3.Controllers
             return View(users);
         }
 
+        [HttpPost]
         public ActionResult IdSearchAjax()
         {
             var userId = Request.Form.GetValues("userId")[0];
@@ -36,6 +39,7 @@ namespace Community3.Controllers
             return PartialView("_EmptyList");
         }
 
+        [HttpPost]
         public ActionResult NameSearchAjax()
         {
             var userName = Request.Form.GetValues("userName")[0];
@@ -49,6 +53,7 @@ namespace Community3.Controllers
             return PartialView("_UsersList", users);
         }
 
+        [HttpPost]
         public ActionResult EmailSearchAjax()
         {
             var userEmail = Request.Form.GetValues("userEmail")[0];
@@ -62,6 +67,7 @@ namespace Community3.Controllers
             return PartialView("_UsersList", users);
         }
 
+        [HttpPost]
         public ActionResult GroupIdSearchAjax()
         {
             int groupId;
@@ -90,6 +96,7 @@ namespace Community3.Controllers
             }
         }
 
+        [HttpPost]
         public ActionResult GroupNameSearchAjax()
         {
             var groupName = Request.Form.GetValues("groupName")[0];
@@ -106,6 +113,7 @@ namespace Community3.Controllers
             return PartialView("_GroupsList", groupsList);
         }
 
+        [HttpPost]
         public ActionResult GroupOwnerSearchAjax()
         {
             var groupOwnerId = Request.Form.GetValues("ownerId")[0];
@@ -122,6 +130,7 @@ namespace Community3.Controllers
             return PartialView("_GroupsList", groupsList);
         }
 
+        [HttpGet]
         public ActionResult ManageUser(string id)
         {
             var userManager = new ApplicationUserManager(new UserStore<AppUser>(new ApplicationDbContext()));
@@ -129,6 +138,7 @@ namespace Community3.Controllers
             return View(user);
         }
 
+        [HttpGet]
         public ActionResult RemoveUser(string id)
         {
             var userManager = new ApplicationUserManager(new UserStore<AppUser>(new ApplicationDbContext()));
@@ -291,7 +301,7 @@ namespace Community3.Controllers
             }
         }
 
-
+        [HttpGet]
         public ActionResult BlockUnblockUser(string id)
         {
 
@@ -310,6 +320,7 @@ namespace Community3.Controllers
             return RedirectToAction("UserProfile", "Home", new { id = id });
         }
 
+        [HttpGet]
         public ActionResult AddUserAdminRole(string id)
         {
             var userManager = new ApplicationUserManager(new UserStore<AppUser>(new ApplicationDbContext()));
@@ -326,6 +337,7 @@ namespace Community3.Controllers
             return RedirectToAction("AdminPage");
         }
 
+        [HttpGet]
         public ActionResult AddUserModerRole(string id)
         {
             var userManager = new ApplicationUserManager(new UserStore<AppUser>(new ApplicationDbContext()));

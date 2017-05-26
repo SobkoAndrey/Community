@@ -7,19 +7,11 @@
             @if (Model.Group != null)
             {
                 <img src="@Url.Content(Model.Group.Images.Count > 0 ? Model.Group.Images.First().Path : "~/Content/no-image.jpg")" alt="Фото группы" title="@Model.Name" style="max-width: 100%; height:auto; border-radius: 10%" />
-                @*<img src="@Url.Content(Model.Group.Images.First().Path)" alt="Фотография сообщества" title="@Model.Group.Images.First().Label" style="max-width: 100%; height:auto; border-radius: 10%" />*@
             }
             else if (Model.AppUser != null)
             {
                 <img src="@Url.Content(Model.AppUser.Images.Count > 0 ? Model.AppUser.Images.First().Path : "~/Content/no-avatar.png")" alt="Фотография пользователя" title="@Model.AppUser.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
-                @*if (Model.Images.Count > 0)
-                {
-                    <img src="@Url.Content(Model.Images.First().Path)" alt="Фотография пользователя" title="@Model.AppUser.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
-                }
-                else
-                {
-                    <img src="@Url.Content("~/Content/no-avatar.png")" alt="Фотография пользователя" title="@Model.AppUser.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
-                }*@
+
             }
         </div>
         <div class="col-md-4">

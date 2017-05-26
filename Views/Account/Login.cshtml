@@ -15,9 +15,6 @@
 
 <body class="MainBack" style="text-align:center">
     <div class="MainWindow" style="margin-left:300px; margin-right:300px">
-        @*<div class="row">*@
-        @*<div class="col-md-8">
-            <section id="loginForm">*@
         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
             {
             @Html.AntiForgeryToken()
@@ -46,23 +43,16 @@
                 @Html.LabelFor(m => m.RememberMe)
             </div>
             <br />
-                        <div>
-                            <input type="submit" value="Выполнить вход" />
-                        </div>
-                        <br />
-                                <p>
-                                    @Html.ActionLink("Регистрация нового пользователя", "Register")
-                                </p>
+            <div>
+                <input type="submit" value="Выполнить вход" />
+            </div>
+            <br />
+            <p>
+                @Html.ActionLink("Регистрация нового пользователя", "Register")
+            </p>
 
         }
-        @*</section>
-            </div>*@
-        @*<div class="col-md-4">
-                <section id="socialLoginForm">
-                    @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-                </section>
-            </div>*@
-        @*</div>*@
+
     </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")

@@ -7,14 +7,6 @@
             <div class="row" style="margin-left: auto">
                 <div class="col-md-4">
                     <img src="@Url.Content(Model.Images.Count > 0 ? Model.Images.First().Path : "~/Content/no-avatar.png")" alt="Фотография пользователя" title="@Model.FullName" style="max-width: 100%; height:auto; border-radius: 10%" />
-                    @*@if (Model.Images.Count > 0)
-                    {
-                        <img src="@Url.Content(Model.Images.First().Path)" alt="fgj" title="fgn" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
-                    }
-                    else
-                    {
-                        <img src="@Url.Content("~/Content/no-avatar.png")" alt="Аватар" title="Аватар" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
-                    }*@
                     <br />
                     @if (ViewBag.Access == "Denied")
                     {

@@ -14,15 +14,6 @@ namespace Community3.Helpers
 {
     public class ImageHelper
     {
-        //protected ApplicationDbContext ApplicationDbContext { get; set; }
-        //protected UserManager<AppUser> UserManager { get; set; }
-
-        //public ImageHelper()
-        //{
-        //    this.ApplicationDbContext = new ApplicationDbContext();
-        //    this.UserManager = new UserManager<AppUser>(new UserStore<AppUser>(this.ApplicationDbContext));
-        //}
-
         List<string> extensions = new List<string>() { ".jpg", ".gif", ".png" };
 
         public Image GetImageFromFile(HttpPostedFileBase file)

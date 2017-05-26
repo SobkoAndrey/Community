@@ -11,7 +11,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header" style="margin-left:5.5%">
-                @Html.ActionLink("Community", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Community", "Index", "Home", new { }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-header">
                 @if (User.IsInRole("admin"))

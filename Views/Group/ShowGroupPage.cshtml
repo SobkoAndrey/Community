@@ -159,23 +159,10 @@
 
 @section Group
     {
-<img src="@Url.Content(Model.Images.Count > 0 ? Model.Images.First().Path : "~/Content/no-image.jpg")" alt="Фото группы" title="@Model.Name" style="max-width: 100%; height:auto; border-radius: 10%" />
-    @*@if (Model.Images.Count > 0)
-    {
-        <img src="@Url.Content(Model.Images.First().Path)" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
-        <br />*@
-        <div class="MainWindow" style="text-align:center">
-            <div style="font-size:large">@Model.Name</div>
-        </div>
-    @*}
-    else
-    {
-        <img src="~/Content/no-image.jpg" alt="Фото группы" title="Фото группы" style="max-width: 100%; height:auto; border-radius: 10%" /><br />
-        <br />
-        <div class="MainWindow" style="text-align:center">
-            <div style="font-size:large">@Model.Name</div>
-        </div>
-    }*@
+    <img src="@Url.Content(Model.Images.Count > 0 ? Model.Images.First().Path : "~/Content/no-image.jpg")" alt="Фото группы" title="@Model.Name" style="max-width: 100%; height:auto; border-radius: 10%" />
+    <div class="MainWindow" style="text-align:center">
+        <div style="font-size:large">@Model.Name</div>
+    </div>
     @if (User.IsInRole("admin"))
     {
         <br />
@@ -192,25 +179,25 @@
         if (usersIds.Contains(ViewBag.userId))
         {
             <br />
-                        <div style="text-align:center">
-                            <a href="/Group/Unsubscribe/@Model.GroupId" class="btn btn-primary" role="button">Отписаться</a>
-                        </div>
+            <div style="text-align:center">
+                <a href="/Group/Unsubscribe/@Model.GroupId" class="btn btn-primary" role="button">Отписаться</a>
+            </div>
         }
         else
         {
             if (blockUsersIds.Contains(ViewBag.userId))
             {
                 <br />
-                            <div class="MainWindow" style="text-align:center">
-                                <span style="font-weight:600">Вы заблокированы администратором группы</span>
-                            </div>
+                <div class="MainWindow" style="text-align:center">
+                    <span style="font-weight:600">Вы заблокированы администратором группы</span>
+                </div>
             }
             else
             {
                 <br />
-                            <div style="text-align:center">
-                                <a href="/Group/Subscribe/@Model.GroupId" class="btn btn-primary" role="button">Подписаться</a>
-                            </div>
+                <div style="text-align:center">
+                    <a href="/Group/Subscribe/@Model.GroupId" class="btn btn-primary" role="button">Подписаться</a>
+                </div>
             }
         }
     }

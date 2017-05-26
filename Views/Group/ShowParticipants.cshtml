@@ -1,9 +1,5 @@
 ﻿@model Community3.Models.Group
 
-@{
-    ViewBag.Title = "ShowParticipants";
-}
-
 <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
     <div class="container-fluid" style="padding-top: 2%">
         <div class="row" style="margin-left: auto">
@@ -13,14 +9,6 @@
                 {
                     <div>
                         <img src="@Url.Content(user.Images.Count > 0 ? user.Images.First().Path : "~/Content/no-avatar.png")" alt="Фотография подписчика @user.FullName" title="Фотография подписчика @user.FullName" style="max-width: 80px; height: 80px; border-radius: 50%" />
-                        @*@if (user.Images.Count > 0)
-                        {
-                            <img src="@Url.Content(user.Images.First().Path)" alt="Фотография подписчика @user.FullName" title="Фотография подписчика @user.FullName" style="max-width: 80px; height: 80px; border-radius: 50%" /><br />
-                        }
-                        else
-                        {
-                            <img src="~/Content/no-avatar.png" alt="Фотография подписчика @user.FullName" title="Фотография подписчика @user.FullName" style="max-width: 80px; height:80px; border-radius: 50%" /><br />
-                        }*@
                     </div>
                     @Html.ActionLink(user.FullName, "UserProfile", "Home", new { id = user.Id }, null)
                     if (ViewBag.userId == Model.OwnerId)
