@@ -31,6 +31,8 @@ namespace Community3.Models
         public int? GroupId { get; set; }
         public virtual Group Group { get; set; }
 
+        public bool Confirm { get; set; }
+
         public virtual ICollection<Like> Likes { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<Audio> Audios { get; set; }

@@ -29,12 +29,26 @@ namespace Community3.Controllers
         [HttpGet]
         public ActionResult ShowGroupPage(int id)
         {
-            ViewBag.userId = User.Identity.GetUserId();
             var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
-            if(group == null)
+            if (group == null)
             {
                 return View("NullGroupReferenceError");
             }
+            using (var context = new ApplicationDbContext())
+            {
+                var allGroupPosts = context.Posts.Where(_ => _.Group.GroupId == id).ToList();
+                foreach (var post in allGroupPosts)
+                {
+                    if (!post.Confirm)
+                    {
+                        var helper = new PostHelper();
+                        helper.DeletePostById(post.PostId);
+                    }
+                }
+            }
+
+            ViewBag.userId = User.Identity.GetUserId();
+
             ViewBag.currentUser = UserManager.FindById(User.Identity.GetUserId());
             return View(group);
         }
@@ -358,7 +372,7 @@ namespace Community3.Controllers
                 using (ApplicationDbContext)
                 {
                     var post = ApplicationDbContext.Posts.Where(p => p.PostId == postId).FirstOrDefault();
-                    post.GroupId = groupId;
+                    post.Confirm = true;
                     post.CreationDate = DateTime.Now;
                     var group = ApplicationDbContext.Groups.Where(g => g.GroupId == groupId).FirstOrDefault();
                     group.Posts.Add(post);
@@ -370,7 +384,6 @@ namespace Community3.Controllers
             using (ApplicationDbContext)
             {
                 var post = ApplicationDbContext.Posts.Where(p => p.PostId == postId).FirstOrDefault();
-                post.AppUserId = currentUserId;
                 post.CreationDate = DateTime.Now;
                 var user = UserManager.FindById(currentUserId);
                 user.Posts.Add(post);

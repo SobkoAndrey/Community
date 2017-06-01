@@ -44,18 +44,36 @@ namespace Community3.Controllers
         [HttpGet]
         public ActionResult News()
         {
+            using (var context = new ApplicationDbContext())
+            {
+                var manager = new UserManager<AppUser>(new UserStore<AppUser>(context));
+                var user = manager.FindById(User.Identity.GetUserId());
+                var allUserPosts = context.Posts.Where(_ => _.AppUser.Id == user.Id).ToList();
+                foreach (var post in allUserPosts)
+                {
+                    if (!user.Posts.Contains(post))
+                    {
+                        var helper = new PostHelper();
+                        helper.DeletePostById(post.PostId);
+                    }
+                }
+
+            }
+
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var news = new List<Post>();
             var ownerGroupsList = ApplicationDbContext.Groups.Where(_ => _.Owner.Id == currentUser.Id).ToList();
             news = news.Concat(currentUser.Posts).ToList();
             foreach (var group in ownerGroupsList)
             {
-                news = news.Concat(group.Posts).ToList();
+                var confirmPosts = group.Posts.Where(_ => _.Confirm == true);
+                news = news.Concat(confirmPosts).ToList();
             }
 
             foreach (var group in currentUser.Groups)
             {
-                news = news.Concat(group.Posts).ToList();
+                var confirmPosts = group.Posts.Where(_ => _.Confirm == true);
+                news = news.Concat(confirmPosts).ToList();
             }
 
             foreach (var friend in currentUser.Friends)
@@ -128,12 +146,12 @@ namespace Community3.Controllers
         [HttpGet]
         public ActionResult RemoveImage(string userId, int imageId)
         {
-                var user = UserManager.FindById(userId);
+            var user = UserManager.FindById(userId);
 
-                var imageHelper = new ImageHelper();
-                imageHelper.DeleteImageById(imageId);
+            var imageHelper = new ImageHelper();
+            imageHelper.DeleteImageById(imageId);
 
-                return RedirectToAction("Photos", user);
+            return RedirectToAction("Photos", user);
         }
 
         [Authorize(Roles = "user")]
@@ -350,7 +368,7 @@ namespace Community3.Controllers
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());
             var interlocutor = UserManager.FindById(id);
-            if(interlocutor == null)
+            if (interlocutor == null)
             {
                 return View("NullUserReferenceError");
             }
@@ -407,7 +425,7 @@ namespace Community3.Controllers
         {
             var user = UserManager.FindById(id);
 
-            if(user == null)
+            if (user == null)
             {
                 return View("NullUserReferenceError");
             }
@@ -479,6 +497,9 @@ namespace Community3.Controllers
                 using (ApplicationDbContext)
                 {
                     post.CreationDate = DateTime.Now;
+                    var user = UserManager.FindById(User.Identity.GetUserId());
+                    post.AppUser = user;
+                    post.AppUserId = user.Id;
                     ApplicationDbContext.Posts.Add(post);
                     ApplicationDbContext.SaveChanges();
                 }

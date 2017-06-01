@@ -5,7 +5,7 @@
     ViewBag.Title = "ShowGroupPage";
     var audios = Model.Audios.ToArray();
     var images = Model.Images.ToArray();
-    var postList = Model.Posts.ToList().OrderBy(_ => _.CreationDate).Reverse();
+    var postList = Model.Posts.Where(_=>_.Confirm==true).ToList().OrderBy(_ => _.CreationDate).Reverse();
     var usersIds = new List<string>();
     foreach (var user in Model.AppUsers)
     {
