@@ -3,13 +3,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Community3.Helpers;
-using System.Net;
 
 namespace Community3.Controllers
 {
@@ -244,12 +241,28 @@ namespace Community3.Controllers
 
         [Authorize(Roles = "user")]
         [HttpGet]
-        public ActionResult Groups()
+        public ActionResult GroupsList()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
             ViewBag.Groups = ApplicationDbContext.Groups.ToList();
             return View(user);
         }
+
+        [Authorize(Roles = "user")]
+        [HttpPost]
+        public ActionResult GroupSearchAjax()
+        {
+            var groupName = Request.Form.GetValues("groupName")[0];
+
+            var groups = ApplicationDbContext.Groups.Where(_ =>_.Name.Contains(groupName)).ToList();
+            if (groups.Count == 0 || groupName.Length == 0)
+            {
+                return PartialView("_EmptyList");
+            }
+
+            return PartialView("_Groups", groups);
+        }
+        
 
         [Authorize(Roles = "user")]
         [HttpGet]

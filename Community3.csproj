@@ -306,6 +306,8 @@
     <Content Include="Views\Shared\WrongAudioFileExtensionError.cshtml" />
     <Content Include="Views\Shared\NullUserReferenceError.cshtml" />
     <Content Include="Views\Shared\NullGroupReferenceError.cshtml" />
+    <Content Include="Views\Home\GroupsList.cshtml" />
+    <Content Include="Views\Home\_Groups.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Community3.Models.Group>
+
+@foreach (var group in Model)
+{
+    <div>
+        <div class="row" style="margin-left: auto">
+            <div class="col-md-2">
+                <img src="@Url.Content(group.Images.Count > 0 ? group.Images.First().Path : "~/Content/no-image.jpg")" alt="Фотография группы" title="@group.Name" style="max-width: 100%; height:auto; border-radius: 10%" />
+            </div>
+            <div class="col-md-6">
+                <div style="font-weight:600">
+                    @Html.ActionLink(group.Name, "ShowGroupPage", "Group", new { id = group.GroupId }, null)
+                </div>
+            </div>
+        </div>
+        <br />
+        <hr />
+    </div>
+}

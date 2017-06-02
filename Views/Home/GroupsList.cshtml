@@ -1,0 +1,166 @@
+﻿@using Community3.Models
+@model AppUser
+@{ 
+    var isGroup = false;
+}
+<body>
+    <div style="background-color: white; border-radius: 4px; border: thin solid #dddddd">
+        <div class="container-fluid" style="padding-top: 2%">
+            <div class="row" style="margin-left: auto">
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs">
+                        <li id="myGroups" role="presentation" class="active"><a href="#">Основано</a></li>
+                        <li id="subscribed" role="presentation">
+                            <a href="#">Подписан</a>
+                        </li>
+                        <li id="search" role="presentation"><a href="#">Поиск</a></li>
+                    </ul>
+                    <div id="myGroups">
+                        
+                        @foreach (Group group in ViewBag.Groups)
+                        {
+                            if (group.Owner.Id == Model.Id)
+                            {
+                                <br />
+                                <div>
+                                    <div class="row" style="margin-left: auto">
+                                        <div class="col-md-2">
+                                            <img src="@Url.Content(group.Images.Count > 0 ? group.Images.First().Path : "~/Content/no-image.jpg")" alt="Фотография группы" title="@group.Name" style="max-width: 100%; height:auto; border-radius: 10%" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div style="font-weight:600">
+                                                @Html.ActionLink(group.Name, "ShowGroupPage", "Group", new { id = group.GroupId }, null)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <hr />
+                                </div>
+                                isGroup = true;
+                            }
+                        }
+                        @if (!isGroup)
+                        {
+                            <h4>Вы не основали ни одной группы</h4>
+                        }
+                    </div>
+                    <div id="subscribed" class="hidden">
+                        @if (Model.Groups.Count == 0)
+                        {
+                            <h4>Вы не подписались ни на одну группу</h4>
+                        }
+                        @foreach (Group group in Model.Groups)
+                        {
+                            <br />
+                            <div>
+                                <div class="row" style="margin-left: auto">
+                                    <div class="col-md-2">
+                                        <img src="@Url.Content(group.Images.Count > 0 ? group.Images.First().Path : "~/Content/no-image.jpg")" alt="Фотография группы" title="@group.Name" style="max-width: 100%; height:auto; border-radius: 10%" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div style="font-weight:600">
+                                            @Html.ActionLink(group.Name, "ShowGroupPage", "Group", new { id = group.GroupId }, null)
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <hr />
+                            </div>
+                        }
+                    </div>
+                    <div class="row" style="margin-right:auto">
+                        <div class="col-md-12">
+                            <div id="search" class="hidden">
+                                <br />
+                                <div id="inputForm" class="input-group">
+                                    <input type="text" class="form-control" id="name" style="border-top-left-radius:4px; border-bottom-left-radius:4px" />
+                                    <span class="input-group-btn" style="border-radius:4px">
+                                        <button type="button" class="btn btn-default" id="search">Поиск</button>
+                                    </span>
+                                </div>
+                                <br />
+                            </div>
+                            <div id="result">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section CreateGroup{
+    <div style="text-align:center">
+        <a href="/Group/CreateGroup" class="btn btn-primary" role="button">Основать группу</a>
+    </div>
+}
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var divMyGroups = $('div#myGroups');
+            var divSubscribed = $('div#subscribed');
+            var divSearch = $('div#search');
+            var divResult = $('div#result');
+            var liSubscribed = $('li#subscribed');
+            var liMyGroups = $('li#myGroups');
+            var liSearch = $('li#search');
+
+            liMyGroups.click(function () {
+                $(this).addClass('active');
+                liSubscribed.removeClass('active');
+                liSearch.removeClass('active');
+                divMyGroups.removeClass('hidden');
+                divSearch.addClass('hidden');
+                divSubscribed.addClass('hidden');
+                divResult.empty();
+
+            });
+
+            liSubscribed.click(function () {
+                $(this).addClass('active');
+                liMyGroups.removeClass('active');
+                liSearch.removeClass('active');
+                divMyGroups.addClass('hidden');
+                divSearch.addClass('hidden');
+                divSubscribed.removeClass('hidden');
+                divResult.empty();
+            });
+
+            liSearch.click(function () {
+                $(this).addClass('active');
+                liMyGroups.removeClass('active');
+                liSubscribed.removeClass('active');
+                divMyGroups.addClass('hidden');
+                divSubscribed.addClass('hidden');
+                divSearch.removeClass('hidden');
+            });
+
+            $('button#search').click(function () {
+                var groupName = $('#name').val();
+
+                var data = new FormData();
+                data.append('groupName', groupName);
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GroupSearchAjax", "Home")',
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    success: function (result) {
+                        divResult.empty();
+                        divResult.append(result);
+                    },
+                    error: function (xhr, status, p3) {
+                        alert(xhr.responsetext);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

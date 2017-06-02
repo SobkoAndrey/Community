@@ -24,6 +24,7 @@ namespace Community3.Controllers
             return View(users);
         }
 
+        // Поиск пользователя по ID
         [HttpPost]
         public ActionResult IdSearchAjax()
         {
@@ -39,6 +40,7 @@ namespace Community3.Controllers
             return PartialView("_EmptyList");
         }
 
+        // Поиск пользователей по совпадениям имен и фамилий
         [HttpPost]
         public ActionResult NameSearchAjax()
         {
@@ -53,6 +55,7 @@ namespace Community3.Controllers
             return PartialView("_UsersList", users);
         }
 
+        // Поиск пользователей по почте
         [HttpPost]
         public ActionResult EmailSearchAjax()
         {
@@ -67,6 +70,7 @@ namespace Community3.Controllers
             return PartialView("_UsersList", users);
         }
 
+        // Поиск группы по ID
         [HttpPost]
         public ActionResult GroupIdSearchAjax()
         {
@@ -96,6 +100,7 @@ namespace Community3.Controllers
             }
         }
 
+        // Поиск групп по совпадениям названия
         [HttpPost]
         public ActionResult GroupNameSearchAjax()
         {
@@ -113,6 +118,7 @@ namespace Community3.Controllers
             return PartialView("_GroupsList", groupsList);
         }
 
+        // Поиск групп по ID основателя
         [HttpPost]
         public ActionResult GroupOwnerSearchAjax()
         {

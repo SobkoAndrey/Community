@@ -53,6 +53,45 @@ namespace Community3.Controllers
             return View(group);
         }
 
+        [HttpGet]
+        public ActionResult ShowAudio(int id)
+        {
+            ViewBag.userId = User.Identity.GetUserId();
+            var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
+            if (group == null)
+            {
+                return View("NullGroupReferenceError");
+            }
+            return View(group);
+        }
+
+        [HttpGet]
+        public ActionResult ShowImages(int id)
+        {
+            ViewBag.userId = User.Identity.GetUserId();
+            var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
+            if (group == null)
+            {
+                return View("NullGroupReferenceError");
+            }
+            return View(group);
+        }
+
+        [HttpGet]
+        public ActionResult ShowParticipants(int id)
+        {
+            ViewBag.userId = User.Identity.GetUserId();
+            var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
+            if (group == null)
+            {
+                return View("NullGroupReferenceError");
+            }
+
+            return View(group);
+        }
+
+        // Создание группы
+        [HttpGet]
         public ActionResult CreateGroup()
         {
             return View();
@@ -83,6 +122,7 @@ namespace Community3.Controllers
             return View();
         }
 
+        // Далее управление группой - изменение информации, добавление фотографий и аудиозаписей
         [HttpGet]
         public ActionResult ManageGroup(int id)
         {
@@ -151,18 +191,6 @@ namespace Community3.Controllers
         }
 
         [HttpGet]
-        public ActionResult ShowAudio(int id)
-        {
-            ViewBag.userId = User.Identity.GetUserId();
-            var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
-            if(group == null)
-            {
-                return View("NullGroupReferenceError");
-            }
-            return View(group);
-        }
-
-        [HttpGet]
         public ActionResult RemoveAudio(int groupId, int audioId)
         {
             var audioHelper = new AudioHelper();
@@ -204,18 +232,6 @@ namespace Community3.Controllers
         }
 
         [HttpGet]
-        public ActionResult ShowImages(int id)
-        {
-            ViewBag.userId = User.Identity.GetUserId();
-            var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
-            if(group == null)
-            {
-                return View("NullGroupReferenceError");
-            }
-            return View(group);
-        }
-
-        [HttpGet]
         public ActionResult RemoveImage(int groupId, int imageId)
         {
             var imageHelper = new ImageHelper();
@@ -224,6 +240,7 @@ namespace Community3.Controllers
             return RedirectToRoute("Default", new { controller = "Group", action = "ShowImages", id = groupId });
         }
 
+        // Подписка и отписка от группы
         [HttpGet]
         public ActionResult Subscribe(int id)
         {
@@ -269,19 +286,7 @@ namespace Community3.Controllers
             return RedirectToRoute("Default", new { controller = "Group", action = "ShowGroupPage", id = id });
         }
 
-        [HttpGet]
-        public ActionResult ShowParticipants(int id)
-        {
-            ViewBag.userId = User.Identity.GetUserId();
-            var group = ApplicationDbContext.Groups.Where(g => g.GroupId == id).FirstOrDefault();
-            if (group == null)
-            {
-                return View("NullGroupReferenceError");
-            }
-
-            return View(group);
-        }
-
+        // Ограничение доступа к группе, определенному пользователю, основателем группы
         [HttpGet]
         public ActionResult BlockUser(int groupId, string userId)
         {
@@ -298,6 +303,7 @@ namespace Community3.Controllers
             return RedirectToAction("ShowParticipants", new { id = group.GroupId });
         }
 
+        // Далее работа с новостями, как группы, так и конкретного пользователя, надо было вынести в отдельный контроллер :/
         [HttpGet]
         public ActionResult AddPost(int id)
         {
@@ -434,7 +440,7 @@ namespace Community3.Controllers
             var groupHelper = new GroupHelper();
             groupHelper.DeleteGroupById(id);
 
-            return RedirectToAction("Groups", "Home");
+            return RedirectToAction("GroupsList", "Home");
         }
     }
 }
