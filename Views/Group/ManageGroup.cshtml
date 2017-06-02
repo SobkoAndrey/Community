@@ -43,7 +43,10 @@
                     <input type="submit" value="Загрузить" lang="en-us" /> @ViewBag.Audio
                 </form>
                 <br />
+                @Html.ActionLink("Вернуться на страницу группы", "ShowGroupPage", "Group", new { id = Model.GroupId }, new { @class = "btn btn-primary" })
+                <br /><br />
                 @Html.ActionLink("Удалить группу", "RemoveGroup", "Group", new { id = Model.GroupId }, new { @class = "btn btn-danger" })
+                <br /><br />
             </div>
         </div>
     </div>
